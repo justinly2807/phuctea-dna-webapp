@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phúc Tea — Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #1a5c38;
+      --green-mid: #2d7a50;
+      --green-pale: #e8f5ee;
+      --green-dark: #133f27;
+      --gold: #c9a84c;
+      --gold-light: #f0d98a;
+      --gold-pale: #fef9ec;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 20px -3px rgba(0,0,0,0.10), 0 4px 6px -2px rgba(0,0,0,0.05);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==================== HEADER ==================== */
+    .admin-header {
+      background: var(--green);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-header h1 img {
+      height: 32px;
+      mix-blend-mode: screen;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-white {
+      background: var(--white);
+      color: var(--green);
+    }
+    .btn-white:hover { background: var(--green-pale); }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--white);
+    }
+    .btn-gold:hover { background: #b8963e; }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.4);
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+    .btn-green {
+      background: var(--green);
+      color: var(--white);
+    }
+    .btn-green:hover { background: var(--green-dark); }
+
+    /* ==================== LOGIN ==================== */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .login-overlay.hidden { display: none; }
+    .login-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+    .login-box h2 {
+      color: var(--green);
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .login-box p {
+      color: var(--gray-600);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .login-box input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+    .login-error {
+      color: #dc2626;
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    /* ==================== MAIN LAYOUT ==================== */
+    .admin-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat-card .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--green);
+    }
+    .stat-card .stat-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* Filters */
+    .filters-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .filter-input {
+      padding: 8px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      background: var(--white);
+      min-width: 160px;
+    }
+    .filter-input:focus { outline: none; border-color: var(--green); }
+    .filter-select {
+      padding: 8px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    /* Table */
+    .data-table-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table thead {
+      background: var(--green-pale);
+    }
+    .data-table th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--green-dark);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .data-table th:hover { background: rgba(26,92,56,0.08); }
+    .data-table th .sort-icon { font-size: 10px; margin-left: 4px; }
+    .data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+    .data-table tbody tr:hover { background: var(--gray-50); }
+    .data-table tbody tr { cursor: pointer; }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .status-badge.complete {
+      background: var(--green-pale);
+      color: var(--green);
+    }
+    .status-badge.partial {
+      background: var(--gold-pale);
+      color: #92700c;
+    }
+    .score-cell {
+      font-weight: 700;
+    }
+    .score-high { color: var(--green); }
+    .score-mid { color: var(--gold); }
+    .score-low { color: #dc2626; }
+
+    /* Detail panel */
+    .detail-overlay {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 520px;
+      max-width: 95vw;
+      background: var(--white);
+      box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+      z-index: 200;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .detail-overlay.open { transform: translateX(0); }
+    .detail-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 199;
+      display: none;
+    }
+    .detail-backdrop.open { display: block; }
+    .detail-header {
+      padding: 20px 24px;
+      background: var(--green);
+      color: var(--white);
+    }
+    .detail-header .close-btn {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 24px;
+      cursor: pointer;
+      float: right;
+      line-height: 1;
+    }
+    .detail-header h3 { font-size: 18px; margin-top: 4px; }
+    .detail-header p { font-size: 13px; opacity: 0.8; }
+    .detail-body { padding: 24px; }
+    .detail-section {
+      margin-bottom: 24px;
+    }
+    .detail-section h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--green-pale);
+    }
+
+    /* Radar chart canvas */
+    .radar-wrap {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .radar-wrap canvas {
+      max-width: 300px;
+      width: 100%;
+    }
+
+    /* Score list in detail */
+    .score-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .score-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .score-item .name { font-weight: 600; color: var(--gray-700); }
+    .score-item .value { font-weight: 800; font-size: 14px; }
+
+    /* History section in detail */
+    .history-list {
+      font-size: 12px;
+    }
+    .history-item {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray-400);
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-400);
+    }
+    .loading .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-header { padding: 12px 16px; }
+      .admin-header h1 { font-size: 15px; }
+      .admin-main { padding: 16px; }
+      .stats-bar { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 14px; }
+      .stat-card .stat-value { font-size: 22px; }
+      .filters-bar { gap: 8px; }
+      .filter-input, .filter-select { min-width: 120px; font-size: 12px; }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+      .detail-overlay { width: 100vw; }
+      .btn { padding: 6px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== LOGIN OVERLAY ==================== -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <h2>🔐 Admin Dashboard</h2>
+    <p>Phúc Tea — DNA Đối Tác Thành Công</p>
+    <input type="password" id="adminPassword" placeholder="Nhập mật khẩu admin" autofocus>
+    <div class="login-error" id="loginError">Sai mật khẩu. Vui lòng thử lại.</div>
+    <button class="btn btn-green" onclick="attemptLogin()" style="width:100%;justify-content:center;padding:12px;">Đăng nhập</button>
+  </div>
+</div>
+
+<!-- ==================== HEADER ==================== -->
+<header class="admin-header" id="mainHeader" style="display:none;">
+  <h1>
+    <img src="assets/logo-white.png" alt="Phúc Tea" onerror="this.style.display='none'">
+    Admin Dashboard
+  </h1>
+  <div class="header-actions">
+    <button class="btn btn-outline" onclick="fetchData()" id="refreshBtn">🔄 Tải lại</button>
+    <button class="btn btn-white" onclick="exportCSV()">📥 Xuất CSV</button>
+    <button class="btn btn-outline" onclick="logout()">Đăng xuất</button>
+  </div>
+</header>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<main class="admin-main" id="mainContent" style="display:none;">
+
+  <!-- Stats -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card">
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-label">Tổng đối tác</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statComplete">0</div>
+      <div class="stat-label">Hoàn thành 8/8</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statAvgScore">0</div>
+      <div class="stat-label">Điểm TB toàn hệ thống</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statToday">0</div>
+      <div class="stat-label">Hôm nay</div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <input type="text" class="filter-input" id="filterSearch" placeholder="🔍 Tìm tên hoặc SĐT..." oninput="applyFilters()">
+    <select class="filter-select" id="filterStatus" onchange="applyFilters()">
+      <option value="all">Tất cả trạng thái</option>
+      <option value="complete">Hoàn thành 8/8</option>
+      <option value="partial">Đang làm</option>
+    </select>
+    <select class="filter-select" id="filterScore" onchange="applyFilters()">
+      <option value="all">Tất cả điểm</option>
+      <option value="high">≥ 4.0</option>
+      <option value="mid">3.0 – 3.9</option>
+      <option value="low">< 3.0</option>
+    </select>
+    <select class="filter-select" id="filterDate" onchange="applyFilters()">
+      <option value="all">Tất cả ngày</option>
+      <option value="today">Hôm nay</option>
+      <option value="week">7 ngày qua</option>
+      <option value="month">30 ngày qua</option>
+    </select>
+    <span id="resultCount" style="font-size:12px;color:var(--gray-400);margin-left:auto;"></span>
+  </div>
+
+  <!-- Data Table -->
+  <div class="data-table-wrap">
+    <table class="data-table" id="dataTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('index')"># <span class="sort-icon"></span></th>
+          <th onclick="sortTable('name')">Họ tên <span class="sort-icon"></span></th>
+          <th onclick="sortTable('phone')">SĐT <span class="sort-icon"></span></th>
+          <th onclick="sortTable('avgScore')">Điểm TB <span class="sort-icon"></span></th>
+          <th onclick="sortTable('archetype')">Archetype <span class="sort-icon"></span></th>
+          <th onclick="sortTable('status')">Trạng thái <span class="sort-icon"></span></th>
+          <th onclick="sortTable('timestamp')">Ngày <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="7" class="loading"><div class="spinner"></div>Đang tải dữ liệu...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- ==================== DETAIL PANEL ==================== -->
+<div class="detail-backdrop" id="detailBackdrop" onclick="closeDetail()"></div>
+<div class="detail-overlay" id="detailPanel">
+  <div class="detail-header">
+    <button class="close-btn" onclick="closeDetail()">×</button>
+    <h3 id="detailName">—</h3>
+    <p id="detailPhone">—</p>
+  </div>
+  <div class="detail-body" id="detailBody"></div>
+</div>
+
+<script>
+// ==================== CONFIG ====================
+const ADMIN_PASSWORD = 'phuctea2025';
+const SHEETS_API_URL = ''; // Paste URL Google Apps Script ở đây
+
+const DNA_NAMES = [
+  'Cam kết & Sâu sát',
+  'Tư duy Chiến lược',
+  'Quyết đoán & Hành động',
+  'Tư duy Hợp tác Win-Win',
+  'Giao tiếp Chủ động',
+  'Kiểm soát Cảm xúc',
+  'Hướng về Khách hàng',
+  'Nghiên cứu & Cập nhật Thị trường'
+];
+const DNA_ICONS = ['🎯','🧠','⚡','🤝','💬','🧘','❤️','🔍'];
+const BENCHMARK_SCORES = [4.5, 4.2, 4.3, 4.4, 4.5, 4.1, 4.6, 4.3];
+
+let allData = [];
+let filteredData = [];
+let sortCol = 'timestamp';
+let sortDir = 'desc';
+
+// ==================== AUTH ====================
+function checkAuth() {
+  // Allow ?key=SECRET in URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('key') === ADMIN_PASSWORD) {
+    showDashboard();
+    return;
+  }
+  if (sessionStorage.getItem('admin_auth') === 'true') {
+    showDashboard();
+    return;
+  }
+}
+
+function attemptLogin() {
+  const pw = document.getElementById('adminPassword').value;
+  if (pw === ADMIN_PASSWORD) {
+    sessionStorage.setItem('admin_auth', 'true');
+    showDashboard();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPassword').focus();
+  }
+}
+
+function showDashboard() {
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('mainHeader').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'block';
+  fetchData();
+}
+
+function logout() {
+  sessionStorage.removeItem('admin_auth');
+  location.reload();
+}
+
+// ==================== DATA FETCH ====================
+async function fetchData() {
+  const refreshBtn = document.getElementById('refreshBtn');
+  refreshBtn.disabled = true;
+  refreshBtn.textContent = '⏳ Đang tải...';
+
+  try {
+    if (SHEETS_API_URL) {
+      const resp = await fetch(SHEETS_API_URL + '?action=getAll');
+      const json = await resp.json();
+      allData = json.data || json || [];
+    } else {
+      // Demo mode: load from localStorage entries
+      allData = loadFromLocalStorage();
+    }
+    processData();
+  } catch (err) {
+    console.error('Fetch error:', err);
+    // Fallback to localStorage
+    allData = loadFromLocalStorage();
+    processData();
+  }
+
+  refreshBtn.disabled = false;
+  refreshBtn.textContent = '🔄 Tải lại';
+}
+
+function loadFromLocalStorage() {
+  const data = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('phuctea_dna_') && key !== 'phuctea_dna_state') {
+      try {
+        const item = JSON.parse(localStorage.getItem(key));
+        if (item && item.userName) {
+          const scores = [];
+          if (item.answers) {
+            for (let d = 0; d < 8; d++) {
+              const ans = item.answers[d] || [];
+              scores.push(ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0);
+            }
+          }
+          const validScores = scores.filter(s => s > 0);
+          const avgScore = validScores.length > 0 ? validScores.reduce((s, v) => s + v, 0) / validScores.length : 0;
+
+          data.push({
+            timestamp: item.lastUpdated || new Date().toISOString(),
+            name: item.userName || '',
+            phone: item.userPhone || key.replace('phuctea_dna_', ''),
+            scores: scores,
+            avgScore: parseFloat(avgScore.toFixed(2)),
+            archetype: item.archetype || '',
+            status: (item.completedDNAs ? item.completedDNAs.length : 0) + '/8',
+            completedDNAs: item.completedDNAs || [],
+            answers: item.answers || {},
+            assessmentHistory: item.assessmentHistory || []
+          });
+        }
+      } catch(e) {}
+    }
+  }
+  return data;
+}
+
+function processData() {
+  // Normalize
+  allData = allData.map((row, i) => {
+    // If scores is a string, parse it
+    if (typeof row.scores === 'string') {
+      try { row.scores = JSON.parse(row.scores); } catch(e) { row.scores = []; }
+    }
+    if (!Array.isArray(row.scores)) row.scores = [];
+    row.avgScore = parseFloat(row.avgScore) || 0;
+    row._index = i + 1;
+    return row;
+  });
+
+  updateStats();
+  applyFilters();
+}
+
+// ==================== STATS ====================
+function updateStats() {
+  document.getElementById('statTotal').textContent = allData.length;
+
+  const complete = allData.filter(d => d.status === '8/8').length;
+  document.getElementById('statComplete').textContent = complete;
+
+  const validScores = allData.filter(d => d.avgScore > 0);
+  const avgAll = validScores.length > 0
+    ? (validScores.reduce((s, d) => s + d.avgScore, 0) / validScores.length).toFixed(1)
+    : '—';
+  document.getElementById('statAvgScore').textContent = avgAll;
+
+  const today = new Date().toISOString().split('T')[0];
+  const todayCount = allData.filter(d => d.timestamp && d.timestamp.startsWith(today)).length;
+  document.getElementById('statToday').textContent = todayCount;
+}
+
+// ==================== FILTERS ====================
+function applyFilters() {
+  const search = document.getElementById('filterSearch').value.toLowerCase().trim();
+  const status = document.getElementById('filterStatus').value;
+  const score = document.getElementById('filterScore').value;
+  const dateFilter = document.getElementById('filterDate').value;
+
+  filteredData = allData.filter(d => {
+    // Search
+    if (search && !(d.name || '').toLowerCase().includes(search) && !(d.phone || '').includes(search)) return false;
+
+    // Status
+    if (status === 'complete' && d.status !== '8/8') return false;
+    if (status === 'partial' && d.status === '8/8') return false;
+
+    // Score
+    if (score === 'high' && d.avgScore < 4.0) return false;
+    if (score === 'mid' && (d.avgScore < 3.0 || d.avgScore >= 4.0)) return false;
+    if (score === 'low' && d.avgScore >= 3.0) return false;
+
+    // Date
+    if (dateFilter !== 'all' && d.timestamp) {
+      const ts = new Date(d.timestamp);
+      const now = new Date();
+      if (dateFilter === 'today') {
+        if (ts.toDateString() !== now.toDateString()) return false;
+      } else if (dateFilter === 'week') {
+        if ((now - ts) > 7 * 24 * 60 * 60 * 1000) return false;
+      } else if (dateFilter === 'month') {
+        if ((now - ts) > 30 * 24 * 60 * 60 * 1000) return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Sort
+  sortData();
+
+  document.getElementById('resultCount').textContent = `${filteredData.length}/${allData.length} đối tác`;
+
+  renderTable();
+}
+
+// ==================== SORTING ====================
+function sortTable(col) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = col === 'avgScore' || col === 'timestamp' ? 'desc' : 'asc';
+  }
+  sortData();
+  renderTable();
+
+  // Update sort icons
+  document.querySelectorAll('.data-table th .sort-icon').forEach(el => el.textContent = '');
+  const headers = ['index', 'name', 'phone', 'avgScore', 'archetype', 'status', 'timestamp'];
+  const idx = headers.indexOf(col);
+  if (idx >= 0) {
+    document.querySelectorAll('.data-table th')[idx].querySelector('.sort-icon').textContent =
+      sortDir === 'asc' ? '▲' : '▼';
+  }
+}
+
+function sortData() {
+  filteredData.sort((a, b) => {
+    let va = a[sortCol] || '';
+    let vb = b[sortCol] || '';
+    if (sortCol === 'avgScore') { va = parseFloat(va) || 0; vb = parseFloat(vb) || 0; }
+    if (sortCol === 'index') { va = a._index; vb = b._index; }
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
+// ==================== TABLE RENDER ====================
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+
+  if (filteredData.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7">
+      <div class="empty-state"><div class="icon">📭</div><p>Không tìm thấy dữ liệu</p></div>
+    </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filteredData.map((d, i) => {
+    const scoreClass = d.avgScore >= 4.0 ? 'score-high' : d.avgScore >= 3.0 ? 'score-mid' : 'score-low';
+    const statusClass = d.status === '8/8' ? 'complete' : 'partial';
+    const date = d.timestamp ? new Date(d.timestamp).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+
+    return `<tr onclick="showDetail(${filteredData.indexOf(d)})">
+      <td>${d._index}</td>
+      <td><strong>${escapeHtml(d.name || '—')}</strong></td>
+      <td>${escapeHtml(d.phone || '—')}</td>
+      <td class="score-cell ${scoreClass}">${d.avgScore > 0 ? d.avgScore.toFixed(1) : '—'}</td>
+      <td>${escapeHtml(d.archetype || '—')}</td>
+      <td><span class="status-badge ${statusClass}">${d.status}</span></td>
+      <td style="font-size:12px;color:var(--gray-400);">${date}</td>
+    </tr>`;
+  }).join('');
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ==================== DETAIL PANEL ====================
+function showDetail(idx) {
+  const d = filteredData[idx];
+  if (!d) return;
+
+  document.getElementById('detailName').textContent = d.name || '—';
+  document.getElementById('detailPhone').textContent = '📱 ' + (d.phone || '—');
+
+  const body = document.getElementById('detailBody');
+  const scores = d.scores || [];
+
+  // Summary
+  const statusClass = d.status === '8/8' ? 'complete' : 'partial';
+  let html = `
+    <div class="detail-section">
+      <h4>Tổng quan</h4>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+        <div style="flex:1;min-width:100px;text-align:center;padding:12px;background:var(--green-pale);border-radius:10px;">
+          <div style="font-size:24px;font-weight:800;color:var(--green);">${d.avgScore > 0 ? d.avgScore.toFixed(1) : '—'}</div>
+          <div style="font-size:11px;color:var(--gray-600);">Điểm TB</div>
+        </div>
+        <div style="flex:1;min-width:100px;text-align:center;padding:12px;background:var(--gold-pale);border-radius:10px;">
+          <div style="font-size:16px;font-weight:700;color:var(--green-dark);">${d.archetype || '—'}</div>
+          <div style="font-size:11px;color:var(--gray-600);">Archetype</div>
+        </div>
+        <div style="flex:1;min-width:100px;text-align:center;padding:12px;background:var(--gray-50);border-radius:10px;">
+          <span class="status-badge ${statusClass}" style="font-size:13px;">${d.status}</span>
+          <div style="font-size:11px;color:var(--gray-600);margin-top:4px;">Tiến trình</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Radar chart
+  html += `
+    <div class="detail-section">
+      <h4>Radar Chart</h4>
+      <div class="radar-wrap"><canvas id="detailRadar" width="300" height="300"></canvas></div>
+    </div>`;
+
+  // Score breakdown
+  html += `
+    <div class="detail-section">
+      <h4>Chi tiết 8 DNA</h4>
+      <div class="score-list">
+        ${DNA_NAMES.map((name, i) => {
+          const s = scores[i] || 0;
+          const bm = BENCHMARK_SCORES[i];
+          const diff = s > 0 ? (s - bm).toFixed(1) : '—';
+          const diffColor = s === 0 ? 'var(--gray-400)' : s >= bm ? 'var(--green)' : '#dc2626';
+          return `<div class="score-item">
+            <span class="name">${DNA_ICONS[i]} ${name}</span>
+            <span class="value" style="color:${diffColor}">${s > 0 ? s.toFixed(1) : '—'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  // Comparison table
+  if (scores.some(s => s > 0)) {
+    html += `
+      <div class="detail-section">
+        <h4>So sánh với Chuẩn Chủ</h4>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <tr style="background:var(--green-pale);">
+            <th style="padding:8px;text-align:left;">DNA</th>
+            <th style="padding:8px;text-align:center;">Điểm</th>
+            <th style="padding:8px;text-align:center;">Chuẩn</th>
+            <th style="padding:8px;text-align:center;">Chênh lệch</th>
+          </tr>
+          ${DNA_NAMES.map((name, i) => {
+            const s = scores[i] || 0;
+            const bm = BENCHMARK_SCORES[i];
+            const diff = s > 0 ? s - bm : 0;
+            const color = s === 0 ? 'var(--gray-400)' : diff >= 0 ? 'var(--green)' : '#dc2626';
+            return `<tr style="border-bottom:1px solid var(--gray-100);">
+              <td style="padding:6px 8px;">${DNA_ICONS[i]} ${name}</td>
+              <td style="padding:6px 8px;text-align:center;font-weight:700;">${s > 0 ? s.toFixed(1) : '—'}</td>
+              <td style="padding:6px 8px;text-align:center;color:var(--gray-400);">${bm}</td>
+              <td style="padding:6px 8px;text-align:center;font-weight:700;color:${color};">${s > 0 ? (diff >= 0 ? '+' : '') + diff.toFixed(1) : '—'}</td>
+            </tr>`;
+          }).join('')}
+        </table>
+      </div>`;
+  }
+
+  // Assessment history
+  if (d.assessmentHistory && d.assessmentHistory.length > 0) {
+    html += `
+      <div class="detail-section">
+        <h4>Lịch sử đánh giá</h4>
+        <div class="history-list">
+          ${d.assessmentHistory.map((h, i) => `
+            <div class="history-item">
+              <span>Lần ${i + 1} — ${new Date(h.date).toLocaleDateString('vi-VN')}</span>
+              <span style="font-weight:700;color:var(--green);">${h.avgScore ? parseFloat(h.avgScore).toFixed(1) : '—'}</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  // Detailed answers
+  if (d.answers) {
+    let answersObj = d.answers;
+    if (typeof answersObj === 'string') {
+      try { answersObj = JSON.parse(answersObj); } catch(e) { answersObj = null; }
+    }
+    if (answersObj && Object.keys(answersObj).length > 0) {
+      html += `
+        <div class="detail-section">
+          <h4>Chi tiết câu trả lời</h4>
+          ${Object.entries(answersObj).map(([dnaIdx, answers]) => {
+            if (!Array.isArray(answers) || answers.length === 0) return '';
+            return `<div style="margin-bottom:8px;">
+              <span style="font-weight:700;font-size:12px;">${DNA_ICONS[dnaIdx]} ${DNA_NAMES[dnaIdx]}</span>
+              <span style="margin-left:8px;font-size:12px;color:var(--gray-400);">
+                Q1: ${answers[0] || '—'} | Q2: ${answers[1] || '—'} | Q3: ${answers[2] || '—'}
+              </span>
+            </div>`;
+          }).join('')}
+        </div>`;
+    }
+  }
+
+  // Timestamp
+  html += `<div style="font-size:11px;color:var(--gray-400);text-align:center;padding-top:16px;border-top:1px solid var(--gray-100);">
+    Cập nhật: ${d.timestamp ? new Date(d.timestamp).toLocaleString('vi-VN') : '—'}
+  </div>`;
+
+  body.innerHTML = html;
+
+  // Draw radar
+  setTimeout(() => drawRadar('detailRadar', scores), 50);
+
+  // Open panel
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailBackdrop').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailBackdrop').classList.remove('open');
+}
+
+// ==================== RADAR CHART ====================
+function drawRadar(canvasId, scores) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const size = 300;
+  canvas.width = size * 2;
+  canvas.height = size * 2;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  ctx.scale(2, 2);
+
+  const cx = size / 2, cy = size / 2, r = size / 2 - 40;
+  const n = 8;
+  const angleStep = (2 * Math.PI) / n;
+  const startAngle = -Math.PI / 2;
+
+  function getPoint(i, val) {
+    const a = startAngle + i * angleStep;
+    const dist = (val / 5) * r;
+    return { x: cx + dist * Math.cos(a), y: cy + dist * Math.sin(a) };
+  }
+
+  // Background grid
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 0.5;
+  for (let level = 1; level <= 5; level++) {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const p = getPoint(i % n, level);
+      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  // Axis lines
+  for (let i = 0; i < n; i++) {
+    const p = getPoint(i, 5);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
+
+  // Benchmark polygon
+  ctx.beginPath();
+  BENCHMARK_SCORES.forEach((s, i) => {
+    const p = getPoint(i, s);
+    i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+  });
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(201,168,76,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // User polygon
+  if (scores.some(s => s > 0)) {
+    ctx.beginPath();
+    scores.forEach((s, i) => {
+      const p = getPoint(i, s || 0);
+      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(26,92,56,0.15)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(26,92,56,0.8)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Points
+    scores.forEach((s, i) => {
+      if (s > 0) {
+        const p = getPoint(i, s);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#1a5c38';
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+    });
+  }
+
+  // Labels
+  const shortNames = ['Cam kết', 'Chiến lược', 'Quyết đoán', 'Win-Win', 'Giao tiếp', 'Cảm xúc', 'Khách hàng', 'Thị trường'];
+  ctx.font = '600 10px "Be Vietnam Pro"';
+  ctx.fillStyle = '#374151';
+  ctx.textAlign = 'center';
+  shortNames.forEach((name, i) => {
+    const p = getPoint(i, 5.6);
+    ctx.fillText(name, p.x, p.y + 3);
+  });
+}
+
+// ==================== EXPORT CSV ====================
+function exportCSV() {
+  if (allData.length === 0) {
+    alert('Không có dữ liệu để xuất');
+    return;
+  }
+
+  const headers = ['STT', 'Họ tên', 'SĐT', ...DNA_NAMES.map((n, i) => `DNA${i+1}: ${n}`), 'Điểm TB', 'Archetype', 'Trạng thái', 'Ngày'];
+  const rows = allData.map((d, idx) => {
+    const scores = d.scores || [];
+    const date = d.timestamp ? new Date(d.timestamp).toLocaleDateString('vi-VN') : '';
+    return [
+      idx + 1,
+      d.name || '',
+      d.phone || '',
+      ...scores.map(s => s > 0 ? s.toFixed(1) : ''),
+      d.avgScore > 0 ? d.avgScore.toFixed(1) : '',
+      d.archetype || '',
+      d.status || '',
+      date
+    ];
+  });
+
+  // BOM for UTF-8
+  let csv = '\uFEFF' + headers.join(',') + '\n';
+  rows.forEach(row => {
+    csv += row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',') + '\n';
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `phuctea_partners_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ==================== KEYBOARD ====================
+document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') attemptLogin();
+});
+
+// Escape to close detail
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDetail();
+});
+
+// ==================== INIT ====================
+checkAuth();
+</script>
+</body>
+</html>

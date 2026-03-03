@@ -1,0 +1,2693 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phúc Tea — DNA Đối Tác Thành Công</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #1a5c38;
+      --green-mid: #2d7a50;
+      --green-pale: #e8f5ee;
+      --green-dark: #133f27;
+      --gold: #c9a84c;
+      --gold-light: #f0d98a;
+      --gold-pale: #fef9ec;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 20px -3px rgba(0,0,0,0.10), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --shadow-xl: 0 20px 30px -5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.05);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==================== HEADER ==================== */
+    .app-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--green);
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(26,92,56,0.25);
+    }
+    .app-header .logo {
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .app-header .logo-img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      mix-blend-mode: screen;
+    }
+    .app-header .logo-tagline {
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      line-height: 1.3;
+      transition: opacity 0.3s;
+    }
+    .header-progress {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 500;
+    }
+    .header-progress-bar {
+      width: 80px; height: 4px;
+      background: rgba(255,255,255,0.2); border-radius: 99px;
+    }
+    .header-progress-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--gold-light), var(--gold));
+      transition: width 0.5s ease;
+    }
+    .header-back {
+      background: none; border: none; color: white; cursor: pointer;
+      font-size: 20px; padding: 4px 8px; border-radius: 8px;
+      transition: background 0.18s;
+    }
+    .header-back:hover { background: rgba(255,255,255,0.15); }
+
+    /* ==================== MAIN ==================== */
+    .app-main {
+      padding-top: 56px;
+      min-height: 100vh;
+    }
+
+    /* ==================== SCREENS ==================== */
+    .screen {
+      display: none;
+      animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .screen.active { display: block; }
+
+    /* ==================== WELCOME ==================== */
+    .welcome {
+      min-height: calc(100vh - 56px);
+      background: linear-gradient(145deg, #edf8f1 0%, #fffef7 50%, #ffffff 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px 24px 40px;
+      text-align: center;
+    }
+    .welcome-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 16px;
+      background: linear-gradient(135deg, var(--gold), #e8c86a);
+      color: white; border-radius: 99px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .welcome h1 {
+      font-size: clamp(24px, 5vw, 34px);
+      font-weight: 800; color: var(--green);
+      line-height: 1.3; margin-bottom: 16px;
+      max-width: 500px;
+    }
+    .welcome-sub {
+      font-size: 16px; color: var(--gray-600);
+      line-height: 1.8; max-width: 460px;
+      margin-bottom: 32px;
+    }
+    .welcome-time-hint {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      font-size: 13px; font-weight: 500; color: var(--gray-600);
+    }
+    .welcome-time-hint span {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .welcome-time-hint .divider { color: var(--gray-200); }
+    .welcome-dna-explain {
+      background: var(--gold-pale);
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      max-width: 420px;
+      font-size: 13px; color: var(--gray-700); line-height: 1.6;
+    }
+    .welcome-features {
+      display: flex; flex-direction: column; gap: 10px;
+      margin-bottom: 24px; max-width: 380px; width: 100%;
+    }
+    .welcome-feature {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: left;
+    }
+    .welcome-feature-icon {
+      width: 40px; height: 40px; min-width: 40px;
+      background: var(--green-pale);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .welcome-feature-text {
+      font-size: 14px; font-weight: 500; color: var(--gray-700);
+    }
+    .welcome-input-group {
+      max-width: 380px; width: 100%;
+      margin-bottom: 20px;
+    }
+    .welcome-input-group label {
+      display: block; text-align: left;
+      font-size: 13px; font-weight: 600; color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+    .welcome-input-group input {
+      width: 100%; padding: 14px 18px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-family: inherit; font-size: 15px;
+      transition: border-color 0.18s;
+      outline: none;
+    }
+    .welcome-input-group input:focus {
+      border-color: var(--green);
+    }
+    .welcome-input-group input::placeholder { color: var(--gray-400); }
+
+    /* ==================== BUTTONS ==================== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 26px; border-radius: var(--radius);
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.18s ease;
+      border: none; text-decoration: none; line-height: 1;
+    }
+    .btn-primary {
+      background: var(--green); color: white;
+      box-shadow: 0 4px 14px rgba(26,92,56,0.28);
+    }
+    .btn-primary:hover {
+      background: var(--green-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(26,92,56,0.34);
+    }
+    .btn-gold {
+      background: var(--gold); color: white;
+      box-shadow: 0 4px 14px rgba(201,168,76,0.32);
+    }
+    .btn-gold:hover {
+      background: #b8973f;
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: white; color: var(--green);
+      border: 2px solid var(--green);
+    }
+    .btn-outline:hover { background: var(--green-pale); }
+    .btn-ghost {
+      background: transparent; color: var(--gray-600);
+      padding: 10px 16px;
+    }
+    .btn-ghost:hover { background: var(--gray-100); }
+    .btn-lg { padding: 16px 36px; font-size: 17px; border-radius: 14px; }
+    .btn-full { width: 100%; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+    /* ==================== DNA OVERVIEW ==================== */
+    .overview {
+      padding: 32px 20px 40px;
+      max-width: 760px; margin: 0 auto;
+    }
+    .overview-header {
+      text-align: center; margin-bottom: 28px;
+    }
+    .overview-header h2 {
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 800; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .overview-header p {
+      font-size: 14px; color: var(--gray-600); line-height: 1.7;
+      max-width: 500px; margin: 0 auto;
+    }
+    .overview-progress-section {
+      background: white; border-radius: var(--radius-lg);
+      padding: 20px 24px; margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .overview-progress-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .overview-progress-label { font-size: 14px; font-weight: 600; color: var(--gray-700); }
+    .overview-progress-count { font-size: 13px; font-weight: 500; color: var(--green); }
+    .progress-track {
+      height: 6px; background: var(--gray-200); border-radius: 99px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+    .dna-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .dna-card {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .dna-card:hover {
+      border-color: var(--green);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .dna-card.completed {
+      border-color: var(--green);
+      background: var(--green-pale);
+    }
+    .dna-card-icon {
+      width: 48px; height: 48px; min-width: 48px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      background: var(--green-pale);
+    }
+    .dna-card.completed .dna-card-icon { background: var(--green); }
+    .dna-card-content { flex: 1; }
+    .dna-card-name {
+      font-size: 15px; font-weight: 700; color: var(--gray-800);
+      margin-bottom: 2px;
+    }
+    .dna-card.completed .dna-card-name { color: var(--green-dark); }
+    .dna-card-desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.5;
+    }
+    .dna-card-status {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 99px;
+    }
+    .dna-card-status.done {
+      background: var(--green); color: white;
+    }
+    .dna-card-status.pending {
+      background: var(--gray-100); color: var(--gray-400);
+    }
+    .overview-cta {
+      text-align: center; margin-top: 28px;
+    }
+
+    /* ==================== DNA ASSESSMENT ==================== */
+    .assessment {
+      padding: 28px 20px 40px;
+      max-width: 680px; margin: 0 auto;
+    }
+    .assessment-header {
+      text-align: center; margin-bottom: 24px;
+    }
+    .assessment-dna-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px;
+      background: var(--green-pale); color: var(--green);
+      border-radius: 99px; font-size: 12px; font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .assessment-header h2 {
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 800; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .assessment-header p {
+      font-size: 14px; color: var(--gray-600); line-height: 1.7;
+    }
+    .scenario-box {
+      background: linear-gradient(135deg, var(--green-pale), var(--gold-pale));
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      border-left: 4px solid var(--green);
+    }
+    .scenario-box .scenario-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      color: var(--green); margin-bottom: 6px; letter-spacing: 0.5px;
+    }
+    .scenario-box p {
+      font-size: 15px; color: var(--gray-700); line-height: 1.7;
+      font-style: italic; font-weight: 500;
+    }
+    .question-block {
+      margin-bottom: 28px;
+    }
+    .question-number {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px; letter-spacing: 0.5px;
+    }
+    .question-text {
+      font-size: clamp(16px, 3vw, 18px);
+      font-weight: 700; color: var(--gray-800);
+      margin-bottom: 14px; line-height: 1.5;
+    }
+    .answer-options { display: flex; flex-direction: column; gap: 8px; }
+    .answer-card {
+      padding: 14px 16px;
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .answer-card:hover {
+      border-color: var(--green);
+      background: var(--green-pale);
+      transform: translateX(4px);
+    }
+    .answer-card.selected {
+      border-color: var(--green);
+      background: var(--green-pale);
+    }
+    .answer-card .answer-dot {
+      width: 22px; height: 22px; min-width: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+      transition: all 0.18s;
+    }
+    .answer-card.selected .answer-dot {
+      border-color: var(--green);
+      background: var(--green);
+    }
+    .answer-card.selected .answer-dot::after {
+      content: '';
+      width: 8px; height: 8px;
+      background: white; border-radius: 50%;
+    }
+    .answer-card .answer-text {
+      font-size: 15px; color: var(--gray-700);
+      line-height: 1.5; font-weight: 500;
+    }
+    .answer-card.selected .answer-text { color: var(--green-dark); font-weight: 600; }
+    .scenario-box .scenario-toggle {
+      background: none; border: none; cursor: pointer;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      color: var(--green); padding: 4px 0; margin-top: 8px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .scenario-box.collapsed p { display: none; }
+    .scenario-box.collapsed .scenario-toggle span::after { content: ' \25BC'; }
+    .assessment-back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; cursor: pointer;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--green); padding: 8px 12px;
+      border-radius: 8px; margin-bottom: 12px;
+      transition: background 0.18s;
+    }
+    .assessment-back-btn:hover { background: var(--green-pale); }
+    .insight-box {
+      background: linear-gradient(135deg, #fef9ec, #fff8e1);
+      border-radius: 12px;
+      border-left: 4px solid var(--gold);
+      padding: 18px 20px;
+      margin: 24px 0;
+      box-shadow: 0 2px 8px rgba(201,168,76,0.12);
+    }
+    .insight-box .insight-label {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 6px; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .insight-box p {
+      font-size: 14px; color: var(--gray-700);
+      line-height: 1.7; font-weight: 500;
+    }
+    .assessment-nav {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 32px;
+    }
+    .assessment-question-progress {
+      display: flex; justify-content: center; gap: 6px;
+      margin-bottom: 24px;
+    }
+    .q-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gray-200);
+      transition: all 0.3s;
+    }
+    .q-dot.active { background: var(--green); width: 24px; border-radius: 99px; }
+    .q-dot.done { background: var(--gold); }
+
+    /* ==================== RESULT ==================== */
+    .result {
+      padding: 28px 20px 40px;
+      max-width: 760px; margin: 0 auto;
+    }
+    .result-header {
+      text-align: center; margin-bottom: 28px;
+    }
+    .result-header h2 {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 800; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .result-header p {
+      font-size: 14px; color: var(--gray-600);
+    }
+    .radar-container {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .radar-canvas {
+      max-width: 100%;
+    }
+    .result-summary {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .result-summary h3 {
+      font-size: 18px; font-weight: 700; color: var(--green);
+      margin-bottom: 16px;
+    }
+    .strength-list, .develop-list {
+      list-style: none; padding: 0;
+    }
+    .strength-list li, .develop-list li {
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 14px; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .strength-list li {
+      background: var(--green-pale); color: var(--green-dark);
+    }
+    .develop-list li {
+      background: var(--gold-pale); color: var(--gray-700);
+    }
+    .score-badge {
+      min-width: 36px; text-align: center;
+      padding: 2px 8px; border-radius: 99px;
+      font-size: 12px; font-weight: 700;
+    }
+    .strength-list .score-badge { background: var(--green); color: white; }
+    .develop-list .score-badge { background: var(--gold); color: white; }
+    .dna-breakdown {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+      margin-top: 20px;
+    }
+    .dna-score-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .dna-score-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .dna-score-name {
+      font-size: 14px; font-weight: 600; color: var(--gray-800);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dna-score-value {
+      font-size: 20px; font-weight: 800; color: var(--green);
+    }
+    .dna-score-bar {
+      height: 6px; background: var(--gray-200); border-radius: 99px;
+      margin-bottom: 8px;
+    }
+    .dna-score-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      transition: width 1s ease;
+    }
+    .dna-score-level {
+      font-size: 12px; font-weight: 600;
+      padding: 2px 8px; border-radius: 99px;
+      display: inline-block;
+    }
+    .level-excellent { background: var(--green); color: white; }
+    .level-good { background: var(--green-pale); color: var(--green); }
+    .level-potential { background: var(--gold-pale); color: var(--gold); }
+    .level-developing { background: var(--gray-100); color: var(--gray-600); }
+
+    /* ==================== LEARNING HUB ==================== */
+    .learning {
+      padding: 28px 20px 40px;
+      max-width: 760px; margin: 0 auto;
+    }
+    .learning-header {
+      text-align: center; margin-bottom: 24px;
+    }
+    .learning-header h2 {
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 800; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .learning-card {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color 0.18s;
+    }
+    .learning-card:hover { border-color: var(--green); }
+    .learning-card-header {
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .learning-card-icon {
+      width: 44px; height: 44px; min-width: 44px;
+      background: var(--green-pale);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .learning-card-title {
+      flex: 1;
+      font-size: 15px; font-weight: 700; color: var(--gray-800);
+    }
+    .learning-card-arrow {
+      font-size: 18px; color: var(--gray-400);
+      transition: transform 0.3s;
+    }
+    .learning-card.open .learning-card-arrow { transform: rotate(180deg); }
+    .learning-card-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .learning-card.open .learning-card-body { display: block; }
+    .learning-section {
+      margin-top: 16px;
+    }
+    .learning-section h4 {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      color: var(--green); margin-bottom: 8px; letter-spacing: 0.3px;
+    }
+    .learning-section p {
+      font-size: 14px; color: var(--gray-700); line-height: 1.7;
+    }
+    .learning-section ul {
+      list-style: none; padding: 0;
+    }
+    .learning-section ul li {
+      font-size: 14px; color: var(--gray-700); line-height: 1.7;
+      padding: 4px 0 4px 20px;
+      position: relative;
+    }
+    .learning-section ul li::before {
+      content: '';
+      position: absolute; left: 0; top: 12px;
+      width: 8px; height: 8px;
+      background: var(--green-pale);
+      border: 2px solid var(--green);
+      border-radius: 50%;
+    }
+    .learning-quote {
+      background: var(--green-pale);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 12px;
+      position: relative;
+    }
+    .learning-quote::before {
+      content: '\201C';
+      font-size: 36px; color: var(--green);
+      opacity: 0.3; position: absolute;
+      top: 4px; left: 12px; line-height: 1;
+    }
+    .learning-quote p {
+      font-size: 13px; font-style: italic;
+      color: var(--green-dark); padding-left: 24px;
+    }
+
+    /* ==================== BOTTOM NAV ==================== */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      display: flex; z-index: 100;
+      padding: 6px 0 env(safe-area-inset-bottom, 6px);
+    }
+    .bottom-nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 8px 4px;
+      gap: 2px;
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-400);
+      font-family: inherit; font-size: 10px; font-weight: 600;
+      transition: color 0.18s;
+    }
+    .bottom-nav-item.active { color: var(--green); }
+    .bottom-nav-item svg { width: 22px; height: 22px; }
+    .has-bottom-nav { padding-bottom: 72px; }
+
+    /* ==================== ANIMATIONS ==================== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideRight {
+      from { opacity: 0; transform: translateX(48px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideLeft {
+      from { opacity: 0; transform: translateX(-48px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .slide-right { animation: slideRight 0.38s cubic-bezier(0.22,1,0.36,1); }
+    .slide-left { animation: slideLeft 0.38s cubic-bezier(0.22,1,0.36,1); }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (min-width: 480px) {
+      .dna-grid { grid-template-columns: 1fr 1fr; }
+      .dna-breakdown { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 640px) {
+      .overview { padding: 40px 32px; }
+      .assessment { padding: 36px 32px; }
+      .result { padding: 36px 32px; }
+    }
+
+    /* ==================== OVERVIEW INTRO (#3) ==================== */
+    .overview-intro {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--green);
+    }
+    .overview-intro-title {
+      font-size: 15px; font-weight: 700; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .overview-intro p {
+      font-size: 13px; color: var(--gray-600); line-height: 1.7;
+    }
+    .overview-intro-stat {
+      background: var(--green-pale);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 13px; color: var(--green-dark); line-height: 1.7;
+    }
+    .overview-intro-purpose {
+      margin-top: 10px;
+      font-size: 13px; color: var(--gray-600); line-height: 1.7;
+    }
+    .overview-intro-purpose ul {
+      list-style: none; padding: 0; margin-top: 6px;
+    }
+    .overview-intro-purpose li {
+      padding: 3px 0 3px 20px; position: relative; font-size: 13px;
+    }
+    .overview-intro-purpose li::before {
+      content: ''; position: absolute; left: 0; top: 10px;
+      width: 8px; height: 8px; background: var(--green); border-radius: 50%;
+    }
+
+    /* ==================== DNA ORDER HINT (#8) ==================== */
+    .dna-order-hint {
+      background: var(--gold-pale);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 13px; color: var(--gray-700); line-height: 1.6;
+    }
+    .dna-foundation-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: white;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 99px;
+      margin-left: 6px; vertical-align: middle;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+
+    /* ==================== CELEBRATION OVERLAY (#4, #9) ==================== */
+    .celebration-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .celebration-overlay.active { display: flex; }
+    .celebration-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 36px 28px;
+      max-width: 420px; width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: scaleIn 0.4s cubic-bezier(0.22,1,0.36,1);
+      position: relative; overflow: hidden;
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .celebration-score-ring {
+      width: 100px; height: 100px; margin: 0 auto 16px;
+      border-radius: 50%;
+      background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+    }
+    .celebration-score-ring .score-num {
+      font-size: 28px; font-weight: 800; color: var(--green); line-height: 1;
+    }
+    .celebration-score-ring .score-max {
+      font-size: 12px; color: var(--gray-400); font-weight: 600;
+    }
+    .celebration-next-box {
+      background: var(--gold-pale);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 16px 0;
+      text-align: left;
+    }
+
+    /* ==================== CONFETTI (#9) ==================== */
+    .confetti-container {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none; z-index: 250; overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 10px; height: 10px;
+      top: -20px;
+      opacity: 0;
+      animation: confettiFall 3s ease-in forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ==================== REVIEW MODE (#5) ==================== */
+    .review-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--gold-pale); color: var(--gold);
+      padding: 4px 12px; border-radius: 99px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .review-question-block {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .review-question-block:last-of-type { border-bottom: none; }
+
+    /* ==================== REFLECTION (#6) ==================== */
+    .reflection-section {
+      background: linear-gradient(135deg, var(--green-pale), var(--gold-pale));
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-top: 24px;
+      text-align: center;
+    }
+    .reflection-section h3 {
+      font-size: 17px; font-weight: 700; color: var(--green);
+      margin-bottom: 12px;
+    }
+    .reflection-section p {
+      font-size: 14px; color: var(--gray-700); line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .reflection-textarea {
+      width: 100%; min-height: 80px; padding: 14px;
+      border: 2px solid var(--gray-200); border-radius: var(--radius);
+      font-family: inherit; font-size: 14px; resize: vertical;
+      outline: none; transition: border-color 0.18s;
+    }
+    .reflection-textarea:focus { border-color: var(--green); }
+    .reflection-textarea::placeholder { color: var(--gray-400); }
+
+    /* ==================== CTA FINAL (#7) ==================== */
+    .cta-final {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      margin-top: 24px;
+      text-align: center;
+    }
+    .cta-final h3 {
+      font-size: 17px; font-weight: 700; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .cta-final p {
+      font-size: 13px; color: var(--gray-600); margin-bottom: 20px;
+    }
+    .cta-final .btn { margin-bottom: 10px; }
+
+    /* ==================== BENCHMARK LEGEND (#1) ==================== */
+    .radar-legend {
+      display: flex; justify-content: center; gap: 20px;
+      margin-top: 16px; flex-wrap: wrap;
+    }
+    .radar-legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500; color: var(--gray-600);
+    }
+    .radar-legend-line {
+      width: 24px; height: 3px; border-radius: 2px;
+    }
+    .radar-legend-line.user { background: var(--green); }
+    .radar-legend-line.benchmark { background: var(--gold); opacity: 0.7; border-style: dashed; }
+
+    /* ==================== DEVELOP LINK (#2) ==================== */
+    .develop-link-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--green); font-family: inherit;
+      font-size: 12px; font-weight: 600;
+      padding: 4px 8px; border-radius: 6px;
+      transition: background 0.18s;
+      white-space: nowrap;
+    }
+    .develop-link-btn:hover { background: var(--green-pale); }
+
+    /* ==================== RESET (#10) ==================== */
+    .reset-section {
+      text-align: center; margin-top: 32px;
+      padding-top: 20px; border-top: 1px solid var(--gray-200);
+    }
+    .reset-link {
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-400); font-family: inherit;
+      font-size: 13px; font-weight: 500;
+      padding: 8px 16px; border-radius: 8px;
+      transition: all 0.18s;
+    }
+    .reset-link:hover { color: var(--gray-600); background: var(--gray-100); }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="app-header" id="appHeader">
+    <div class="logo" onclick="goHome()" title="Về trang chủ">
+      <img src="assets/logo-white.png" alt="Phúc Tea" class="logo-img">
+      <span class="logo-tagline" id="logoTagline">Trở thành đối tác thành công!</span>
+    </div>
+    <div class="header-progress" id="headerProgress" style="display:none;">
+      <span id="headerProgressText">0/8</span>
+      <div class="header-progress-bar">
+        <div class="header-progress-fill" id="headerProgressFill" style="width:0%"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== APP MAIN ==================== -->
+  <main class="app-main" id="appMain">
+
+    <!-- ===== SCREEN: WELCOME ===== -->
+    <section class="screen active" id="screenWelcome">
+      <div class="welcome">
+        <div class="welcome-badge">DNA ĐỐI TÁC THÀNH CÔNG</div>
+        <h1>Đối tác doanh thu TOP hệ thống có gì mà bạn chưa có?</h1>
+        <div class="welcome-dna-explain">
+          <strong>DNA</strong> = 8 tố chất kinh doanh cốt lõi, đúc kết từ nhóm đối tác doanh thu dẫn đầu Phúc Tea. Không phải ai cũng mạnh cả 8 — nhưng biết mình yếu ở đâu là bước đầu để bứt phá.
+        </div>
+        <p class="welcome-sub" style="margin-bottom:16px;">
+          Chỉ 5 phút — bạn sẽ biết mình đang ở đâu so với những Chủ quán đạt doanh thu cao nhất.
+        </p>
+        <div class="welcome-time-hint">
+          <span>&#x23F1; ~5 phút</span>
+          <span class="divider">|</span>
+          <span>Không có đúng sai</span>
+          <span class="divider">|</span>
+          <span>Có kết quả ngay</span>
+        </div>
+        <div class="welcome-input-group">
+          <label for="userName">Họ và tên</label>
+          <input type="text" id="userName" placeholder="VD: Nguyễn Văn A" autocomplete="name">
+        </div>
+        <div class="welcome-input-group">
+          <label for="userPhone">Số điện thoại</label>
+          <input type="tel" id="userPhone" placeholder="VD: 0901234567" inputmode="numeric" autocomplete="tel">
+          <div style="font-size:11px; color:var(--gray-400); margin-top:4px; text-align:left;">Số điện thoại để lưu kết quả và xem lại lần sau</div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-full" onclick="startJourney()" id="btnStart">
+          Bắt Đầu Hành Trình
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== SCREEN: OVERVIEW ===== -->
+    <section class="screen" id="screenOverview">
+      <div class="overview has-bottom-nav">
+        <div class="overview-header">
+          <h2>8 DNA Thành Công</h2>
+          <p>Mỗi DNA là một tố chất quan trọng. Hãy khám phá từng DNA để hiểu và phát triển bản thân.</p>
+        </div>
+        <!-- #3: Intro giải thích DNA -->
+        <div class="overview-intro" id="overviewIntro">
+          <div class="overview-intro-title">DNA Thành Công là gì?</div>
+          <p>Dựa trên phỏng vấn chuyên sâu + dữ liệu vận hành thực tế từ nhóm đối tác dẫn đầu hệ thống.</p>
+          <div class="overview-intro-stat">
+            Đa số đối tác doanh thu cao nhất hệ thống đều thể hiện rõ nét các DNA này trong cách họ quản lý và phát triển kinh doanh.
+          </div>
+          <div class="overview-intro-purpose">
+            DNA giúp bạn:
+            <ul>
+              <li>Tự nhận diện điểm mạnh cốt lõi của bản thân</li>
+              <li>Phát hiện cơ hội phát triển cần ưu tiên</li>
+              <li>Có lộ trình rõ ràng trên hành trình làm đối tác Phúc Tea</li>
+            </ul>
+          </div>
+        </div>
+        <div class="overview-progress-section">
+          <div class="overview-progress-top">
+            <span class="overview-progress-label">Tiến trình của bạn</span>
+            <span class="overview-progress-count" id="overviewProgressCount">0/8 DNA</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="overviewProgressFill" style="width:0%"></div>
+          </div>
+        </div>
+        <!-- #8: Gợi ý thứ tự DNA -->
+        <div class="dna-order-hint" id="dnaOrderHint">
+          &#x1F4A1; <strong>Gợi ý:</strong> Bắt đầu với <em>Cam kết & Sâu sát</em> — DNA nền tảng quan trọng nhất
+        </div>
+        <div class="dna-grid" id="dnaGrid"></div>
+        <div class="overview-cta" id="overviewCta"></div>
+      </div>
+    </section>
+
+    <!-- ===== SCREEN: ASSESSMENT ===== -->
+    <section class="screen" id="screenAssessment">
+      <div class="assessment has-bottom-nav" id="assessmentContent"></div>
+    </section>
+
+    <!-- ===== SCREEN: RESULT ===== -->
+    <section class="screen" id="screenResult">
+      <div class="result has-bottom-nav" id="resultContent"></div>
+    </section>
+
+    <!-- ===== SCREEN: LEARNING ===== -->
+    <section class="screen" id="screenLearning">
+      <div class="learning has-bottom-nav" id="learningContent"></div>
+    </section>
+
+  </main>
+
+  <!-- ==================== CELEBRATION OVERLAY (#4, #9) ==================== -->
+  <div class="celebration-overlay" id="celebrationOverlay">
+    <div class="celebration-card" id="celebrationCard"></div>
+  </div>
+
+  <!-- ==================== BOTTOM NAV ==================== -->
+  <nav class="bottom-nav" id="bottomNav" style="display:none;">
+    <button class="bottom-nav-item active" data-screen="overview" onclick="navigateTo('overview')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4m-2.93-7.07-2.83 2.83m-8.48 8.48-2.83 2.83m0-14.14 2.83 2.83m8.48 8.48 2.83 2.83"/></svg>
+      <span>DNA</span>
+    </button>
+    <button class="bottom-nav-item" data-screen="result" onclick="navigateTo('result')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span>Hồ sơ</span>
+    </button>
+    <button class="bottom-nav-item" data-screen="learning" onclick="navigateTo('learning')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      <span>Học liệu</span>
+    </button>
+  </nav>
+
+<script>
+// ==================== DNA DATA ====================
+const DNA_DATA = [
+  {
+    id: 'commitment',
+    name: 'Cam kết & Sâu sát',
+    icon: '\u{1F3AF}',
+    shortDesc: 'Trực tiếp quản lý, dành thời gian và tâm huyết cho cửa hàng mỗi ngày.',
+    fullDesc: 'Những đối tác thành công nhất đều có một điểm chung: họ không chỉ đầu tư tiền, mà đầu tư cả thời gian và sự có mặt. Họ hiểu rằng quản lý từ xa không thể thay thế việc sâu sát thực tế.',
+    scenario: 'Hình dung bạn vừa mở cửa hàng Phúc Tea được 3 tháng. Mọi thứ đã đi vào ổn định, nhân viên đã được đào tạo. Lúc này bạn sẽ quản lý cửa hàng như thế nào?',
+    questions: [
+      {
+        text: 'Bạn dành thời gian tại cửa hàng như thế nào?',
+        answers: [
+          { text: 'Chủ yếu quản lý từ xa, nhờ nhân viên báo cáo', value: 1 },
+          { text: 'Ghé qua 2-3 lần/tuần để kiểm tra nhanh', value: 2 },
+          { text: 'Có mặt khoảng nửa thời gian, nửa còn lại giao cho quản lý', value: 3 },
+          { text: 'Có mặt hầu hết thời gian, chủ động quan sát và hỗ trợ', value: 4 },
+          { text: 'Luôn sâu sát, nắm rõ mọi hoạt động dù đã có quản lý', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi nhân viên gặp khó khăn trong giờ cao điểm, bạn thường...',
+        answers: [
+          { text: 'Chờ quản lý xử lý, mình không can thiệp', value: 1 },
+          { text: 'Nhắn tin hỏi thăm sau khi biết chuyện', value: 2 },
+          { text: 'Gọi điện hướng dẫn xử lý', value: 3 },
+          { text: 'Có mặt hỗ trợ nếu đang ở gần cửa hàng', value: 4 },
+          { text: 'Thường xuyên có mặt giờ cao điểm, sẵn sàng hỗ trợ ngay', value: 5 }
+        ]
+      },
+      {
+        text: 'Bạn nắm rõ tình trạng cửa hàng ở mức nào?',
+        answers: [
+          { text: 'Biết doanh thu tổng, không theo dõi chi tiết', value: 1 },
+          { text: 'Nắm doanh thu và một số chi phí lớn', value: 2 },
+          { text: 'Nắm doanh thu, chi phí, tình trạng nhân sự tổng quan', value: 3 },
+          { text: 'Nắm rõ số liệu, tồn kho, chất lượng phục vụ hàng ngày', value: 4 },
+          { text: 'Biết rõ từng con số, từng nhân viên, từng khung giờ, sản phẩm bán chạy', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Đối tác quản lý 4 cửa hàng đều đạt top doanh thu chia sẻ: "Dù có 4 điểm, tôi vẫn đảm bảo sâu sát từng cửa hàng. Không có gì thay thế được việc mình có mặt."',
+    learning: {
+      why: 'Trong ngành F&B, chi tiết tạo nên trải nghiệm. Một ly trà không đạt chuẩn, một nhân viên thiếu năng lượng, một góc quán chưa sạch — tất cả chỉ có thể phát hiện khi bạn thực sự có mặt.',
+      signs: ['Bạn là người đầu tiên biết khi có vấn đề', 'Nhân viên tin tưởng và chủ động báo cáo cho bạn', 'Bạn nắm rõ "nhịp sống" của cửa hàng theo từng khung giờ'],
+      tips: ['Dành ít nhất 4-5 tiếng/ngày có mặt tại cửa hàng trong 6 tháng đầu', 'Tạo checklist quan sát hàng ngày: chất lượng sản phẩm, thái độ nhân viên, vệ sinh', 'Nếu giao cho quản lý, vẫn duy trì "random check" để kiểm chứng'],
+      reflection: 'Tuần này, có bao nhiêu giờ bạn thực sự có mặt tại cửa hàng? Bạn có phát hiện điều gì mà nhìn từ xa không thể thấy?'
+    }
+  },
+  {
+    id: 'strategic',
+    name: 'Tư duy Chiến lược',
+    icon: '\u{1F9E0}',
+    shortDesc: 'Nhìn bức tranh tổng thể, tư duy marketing, tính bài toán dài hạn.',
+    fullDesc: 'Đối tác thành công không chỉ nhìn doanh thu ngày hôm nay. Họ có khả năng nhìn tổng thể, sẵn sàng đầu tư và hy sinh lợi nhuận ngắn hạn để xây dựng nền tảng khách hàng bền vững.',
+    scenario: 'Cửa hàng của bạn mới mở 2 tháng, doanh thu đang tăng dần nhưng chưa hòa vốn. Bạn có một khoản ngân sách nhỏ và phải quyết định: tiết kiệm chi phí để sớm hòa vốn, hay đầu tư marketing để thu hút thêm khách?',
+    questions: [
+      {
+        text: 'Khi ra quyết định kinh doanh, bạn thường nhìn ở tầm nào?',
+        answers: [
+          { text: 'Tập trung giải quyết vấn đề trước mắt, tính sau', value: 1 },
+          { text: 'Cân nhắc ngắn hạn, đôi khi nghĩ đến trung hạn', value: 2 },
+          { text: 'Cân nhắc cả ngắn hạn và trung hạn (3-6 tháng)', value: 3 },
+          { text: 'Luôn đặt trong bức tranh tổng thể, tính bài toán 6-12 tháng', value: 4 },
+          { text: 'Có tầm nhìn dài hạn, sẵn sàng hy sinh ngắn hạn cho mục tiêu lớn', value: 5 }
+        ]
+      },
+      {
+        text: 'Về marketing và thu hút khách, quan điểm của bạn là gì?',
+        answers: [
+          { text: 'Khách tự đến, không cần đầu tư marketing nhiều', value: 1 },
+          { text: 'Thỉnh thoảng chạy khuyến mãi khi vắng khách', value: 2 },
+          { text: 'Có kế hoạch marketing cơ bản theo tháng', value: 3 },
+          { text: 'Chủ động đầu tư marketing, chấp nhận giảm lợi nhuận ngắn hạn', value: 4 },
+          { text: 'Marketing là đầu tư dài hạn, sẵn sàng chi để xây tập khách trung thành', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi đánh giá hiệu quả cửa hàng, bạn nhìn vào những gì?',
+        answers: [
+          { text: 'Doanh thu ngày hôm nay', value: 1 },
+          { text: 'Doanh thu tuần và tháng', value: 2 },
+          { text: 'Doanh thu, chi phí, lợi nhuận tháng', value: 3 },
+          { text: 'Tổng thể: doanh thu, chi phí, khách quay lại, hiệu suất nhân viên', value: 4 },
+          { text: 'Toàn bộ: doanh thu, tăng trưởng, xu hướng khách, so sánh thị trường', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Nhiều đối tác top doanh thu chia sẻ: "Tôi sẵn sàng hy sinh lợi nhuận 2-3 tháng đầu để có khách. Bài toán lớn hơn là xây dựng thói quen cho khách hàng quay lại."',
+    learning: {
+      why: 'F&B là ngành cạnh tranh khốc liệt. Đối tác chỉ nhìn doanh thu hôm nay sẽ ra quyết định ngắn hạn (cắt chất lượng, giảm nhân sự) — và mất khách dài hạn.',
+      signs: ['Bạn có thể giải thích chiến lược kinh doanh 6 tháng tới', 'Bạn xem chi phí marketing là đầu tư, không phải chi phí', 'Bạn đánh giá cửa hàng bằng nhiều chỉ số, không chỉ doanh thu'],
+      tips: ['Mỗi tháng dành 1 buổi review toàn diện: doanh thu, chi phí, khách hàng, nhân sự', 'Dành 5-10% doanh thu cho marketing, đặc biệt 6 tháng đầu', 'Học cách đọc Báo cáo Lãi-Lỗ để thấy bức tranh tổng thể'],
+      reflection: 'Nếu phải hy sinh lợi nhuận tháng này để tăng lượng khách mới 30%, bạn có sẵn sàng không? Tại sao?'
+    }
+  },
+  {
+    id: 'decisive',
+    name: 'Quyết đoán & Hành động',
+    icon: '\u26A1',
+    shortDesc: 'Ra quyết định nhanh, dứt khoát, và hành động ngay khi cần.',
+    fullDesc: 'Trong kinh doanh F&B, cơ hội và vấn đề đều đến nhanh. Đối tác thành công không do dự quá lâu — họ thu thập đủ thông tin, quyết định, và hành động.',
+    scenario: 'Một vị trí kinh doanh tốt gần cửa hàng bạn vừa có mặt bằng trống. Đồng thời, bạn nhận được phản hồi từ khách rằng chất lượng phục vụ gần đây có giảm. Bạn phải xử lý cả hai vấn đề cùng lúc.',
+    questions: [
+      {
+        text: 'Khi có cơ hội kinh doanh mới (vị trí, chương trình đặc biệt), bạn thường...',
+        answers: [
+          { text: 'Suy nghĩ rất lâu, thường bỏ lỡ cơ hội', value: 1 },
+          { text: 'Cần nhiều thời gian phân tích, đôi khi chậm trễ', value: 2 },
+          { text: 'Cân nhắc trong thời gian hợp lý rồi quyết định', value: 3 },
+          { text: 'Phân tích nhanh và đưa ra quyết định trong 1-2 ngày', value: 4 },
+          { text: 'Quyết định nhanh, dứt khoát ngay khi có đủ thông tin cốt lõi', value: 5 }
+        ]
+      },
+      {
+        text: 'Sau khi đã quyết định một hướng đi, bạn thường...',
+        answers: [
+          { text: 'Thường do dự, thay đổi quyết định nhiều lần', value: 1 },
+          { text: 'Đôi khi lung lay khi gặp ý kiến trái chiều', value: 2 },
+          { text: 'Giữ quyết định nhưng cần thời gian để bắt đầu hành động', value: 3 },
+          { text: 'Thực hiện ngay và kiên định với quyết định', value: 4 },
+          { text: 'Hành động dứt khoát, không ngoái lại, và điều chỉnh nhanh nếu cần', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi phát hiện vấn đề tại cửa hàng (chất lượng giảm, khách phàn nàn)...',
+        answers: [
+          { text: 'Chờ xem tình hình có tự cải thiện không', value: 1 },
+          { text: 'Ghi nhận nhưng chưa hành động ngay', value: 2 },
+          { text: 'Lên kế hoạch xử lý trong tuần', value: 3 },
+          { text: 'Xử lý trong ngày, không để vấn đề kéo dài', value: 4 },
+          { text: 'Hành động ngay lập tức, tìm và giải quyết tận gốc', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Đối tác hàng đầu của Phúc Tea thường nói: "Quyết định nhanh không có nghĩa là liều. Mà là khi đã có đủ 70% thông tin, hành động ngay thay vì chờ 100%."',
+    learning: {
+      why: 'Trong F&B, thị trường thay đổi hàng ngày. Đối thủ mở mới, khách hàng thay đổi thói quen, nhân viên nghỉ đột xuất. Người chờ đợi sẽ thua người hành động.',
+      signs: ['Bạn ra quyết định trong vài giờ thay vì vài tuần', 'Khi đã quyết, bạn ít khi ngoái lại trừ khi có dữ liệu mới', 'Bạn sửa lỗi ngay khi phát hiện, không chờ "lúc rảnh"'],
+      tips: ['Áp dụng quy tắc "70/30": khi có 70% thông tin, hành động luôn', 'Đặt deadline cho mọi quyết định — không để "để mai tính"', 'Khi sai, sửa nhanh. Chi phí sửa sai thường nhỏ hơn chi phí chờ đợi'],
+      reflection: 'Trong tuần này, có quyết định nào bạn đang trì hoãn? Nếu phải quyết ngay bây giờ, bạn sẽ chọn gì?'
+    }
+  },
+  {
+    id: 'winwin',
+    name: 'Tư duy Hợp tác Win-Win',
+    icon: '\u{1F91D}',
+    shortDesc: 'Cởi mở, góp ý xây dựng, tin vào sự phát triển chung.',
+    fullDesc: 'Nhượng quyền là mối quan hệ đối tác. Đối tác thành công hiểu rằng khi hệ thống mạnh, cửa hàng mình hưởng lợi. Họ góp ý xây dựng thay vì chỉ trích, và tìm giải pháp chung thay vì bảo vệ lợi ích riêng.',
+    scenario: 'Phúc Tea vừa đưa ra một chính sách mới về chuẩn hóa nguyên liệu. Bạn cảm thấy chính sách này tăng chi phí vận hành khoảng 5%, nhưng hệ thống giải thích rằng đây là để đảm bảo chất lượng đồng nhất.',
+    questions: [
+      {
+        text: 'Khi hệ thống đưa ra chính sách mới mà bạn chưa đồng ý, bạn thường...',
+        answers: [
+          { text: 'Phản đối ngay, cho rằng hệ thống không hiểu thực tế', value: 1 },
+          { text: 'Không hài lòng nhưng miễn cưỡng thực hiện', value: 2 },
+          { text: 'Thực hiện theo và gửi phản hồi ý kiến', value: 3 },
+          { text: 'Tìm hiểu lý do, góp ý xây dựng, rồi phối hợp thực hiện', value: 4 },
+          { text: 'Tin tưởng có lý do hợp lý, chủ động tìm cách triển khai tốt nhất', value: 5 }
+        ]
+      },
+      {
+        text: 'Về mối quan hệ với hệ thống nhượng quyền, bạn cảm thấy...',
+        answers: [
+          { text: 'Hệ thống chủ yếu hưởng lợi từ phía mình', value: 1 },
+          { text: 'Đôi khi cảm thấy không hoàn toàn công bằng', value: 2 },
+          { text: 'Mối quan hệ bình thường, mỗi bên có vai trò riêng', value: 3 },
+          { text: 'Cả hai bên đều có lợi, đa phần hài lòng', value: 4 },
+          { text: 'Đây là quan hệ đối tác thực sự, thành công chung là mục tiêu', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi góp ý với hệ thống hoặc đồng nghiệp, bạn thường...',
+        answers: [
+          { text: 'Ít khi góp ý, giữ suy nghĩ cho mình', value: 1 },
+          { text: 'Góp ý nhưng chủ yếu từ góc nhìn của mình', value: 2 },
+          { text: 'Góp ý và lắng nghe phản hồi ngược lại', value: 3 },
+          { text: 'Góp ý xây dựng, cân nhắc góc nhìn đối phương', value: 4 },
+          { text: 'Luôn đặt mình vào vị trí đối phương, tìm giải pháp cùng có lợi', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Đối tác luôn đứng top doanh thu chia sẻ: "Mình với hệ thống là một team. Mình góp ý chân thành, cùng nhau tìm cách tốt hơn. Không ai thắng nếu cãi nhau."',
+    learning: {
+      why: 'Đối tác thiếu tư duy win-win thường rơi vào vòng xoáy "nghi ngờ → không phối hợp → kết quả kém → nghi ngờ nhiều hơn". Trong khi đó, đối tác tin tưởng sẽ nhận được nhiều hỗ trợ hơn từ hệ thống.',
+      signs: ['Bạn góp ý bằng sự xây dựng, không phải chỉ trích', 'Bạn tin rằng hệ thống phát triển = mình phát triển', 'Bạn sẵn sàng thỏa hiệp ở chi tiết nhỏ để đạt mục tiêu lớn'],
+      tips: ['Trước khi phản đối, hãy hỏi "Tại sao hệ thống quyết định như vậy?"', 'Khi góp ý, đề xuất giải pháp thay thế thay vì chỉ nêu vấn đề', 'Nhớ rằng: thương hiệu mạnh = nhiều khách hàng tin tưởng = lợi cho cửa hàng mình'],
+      reflection: 'Lần gần nhất bạn không đồng ý với hệ thống, bạn đã xử lý như thế nào? Nếu làm lại, bạn sẽ làm khác không?'
+    }
+  },
+  {
+    id: 'communication',
+    name: 'Giao tiếp Chủ động',
+    icon: '\u{1F4AC}',
+    shortDesc: 'Phản hồi nhanh, chia sẻ thông tin, chủ động tương tác với hệ thống.',
+    fullDesc: 'Giao tiếp không chỉ là trả lời tin nhắn. Đối tác thành công chủ động chia sẻ thông tin, phản hồi nhanh, và xem team hỗ trợ như đồng đội — không phải "bên ngoài".',
+    scenario: 'Team hỗ trợ Phúc Tea gửi tin nhắn hỏi thăm tình hình kinh doanh và muốn hỗ trợ bạn cải thiện doanh thu. Đồng thời, bạn đang gặp một vấn đề nhỏ với chất lượng đá viên gần đây.',
+    questions: [
+      {
+        text: 'Về việc chia sẻ thông tin với team hỗ trợ, bạn thường...',
+        answers: [
+          { text: 'Rất ít khi liên hệ trừ khi bắt buộc', value: 1 },
+          { text: 'Phản hồi khi được hỏi, ít chủ động chia sẻ', value: 2 },
+          { text: 'Chia sẻ khi có vấn đề cần giải quyết', value: 3 },
+          { text: 'Chủ động chia sẻ cả tin tốt lẫn khó khăn', value: 4 },
+          { text: 'Luôn cập nhật, chia sẻ ý tưởng, sẵn sàng trao đổi bất cứ lúc nào', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi gặp khó khăn trong vận hành, bạn thường...',
+        answers: [
+          { text: 'Tự xử lý mọi thứ, không muốn nhờ ai', value: 1 },
+          { text: 'Cố tự xử lý, chỉ nhờ khi không còn cách nào', value: 2 },
+          { text: 'Tìm kiếm hỗ trợ khi vấn đề vượt khả năng', value: 3 },
+          { text: 'Chủ động hỏi ý kiến và tìm hỗ trợ sớm', value: 4 },
+          { text: 'Trao đổi ngay, coi team hỗ trợ là đồng đội giải quyết cùng', value: 5 }
+        ]
+      },
+      {
+        text: 'Thời gian phản hồi khi nhận tin nhắn từ hệ thống?',
+        answers: [
+          { text: 'Thường phản hồi sau vài ngày hoặc quên', value: 1 },
+          { text: 'Phản hồi trong 1-2 ngày', value: 2 },
+          { text: 'Phản hồi trong vài giờ', value: 3 },
+          { text: 'Phản hồi trong 1-2 giờ', value: 4 },
+          { text: 'Phản hồi gần như ngay lập tức, luôn sẵn sàng', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Đối tác phản hồi nhanh nhất hệ thống chia sẻ: "Tôi liên hệ ngay khi có vấn đề hoặc ý tưởng. Không chờ họ hỏi. Team hỗ trợ là cánh tay nối dài của mình."',
+    learning: {
+      why: 'Đối tác thụ động trong giao tiếp thường bỏ lỡ cơ hội hỗ trợ, chương trình marketing, và cải tiến từ hệ thống. Ngược lại, đối tác chủ động luôn nhận được sự quan tâm và phản hồi nhanh nhất.',
+      signs: ['Team hỗ trợ luôn biết tình hình cửa hàng bạn', 'Bạn là người đầu tiên áp dụng chương trình mới', 'Khi bạn cần giúp đỡ, mọi người sẵn sàng vì bạn luôn hợp tác'],
+      tips: ['Đặt mục tiêu phản hồi mọi tin nhắn công việc trong 2 giờ', 'Mỗi tuần gửi 1 tin nhắn cập nhật tình hình cho team hỗ trợ', 'Khi gặp vấn đề, chia sẻ ngay — đừng chờ vấn đề lớn mới nói'],
+      reflection: 'Tuần này bạn có chủ động chia sẻ điều gì với team hỗ trợ không? Có vấn đề nào bạn đang giữ cho mình?'
+    }
+  },
+  {
+    id: 'emotional',
+    name: 'Kiểm soát Cảm xúc',
+    icon: '\u{1F9D8}',
+    shortDesc: 'Bình tĩnh, không đổ lỗi, giữ thái độ ổn định trong mọi tình huống.',
+    fullDesc: 'Kinh doanh luôn có lúc lên lúc xuống. Đối tác thành công giữ được sự bình tĩnh khi áp lực cao, không để cảm xúc chi phối quyết định, và xem thất bại là bài học.',
+    scenario: 'Doanh thu cửa hàng giảm 20% trong 3 tuần liên tiếp. Đồng thời, một nhân viên chủ lực xin nghỉ việc. Bạn cảm thấy áp lực rất lớn.',
+    questions: [
+      {
+        text: 'Khi doanh thu giảm liên tục, phản ứng của bạn là gì?',
+        answers: [
+          { text: 'Lo lắng, stress, ảnh hưởng đến các quyết định khác', value: 1 },
+          { text: 'Khá căng thẳng, đôi khi trút áp lực lên nhân viên', value: 2 },
+          { text: 'Lo nhưng vẫn cố giữ bình tĩnh', value: 3 },
+          { text: 'Bình tĩnh phân tích nguyên nhân, tìm giải pháp', value: 4 },
+          { text: 'Hoàn toàn bình tĩnh, xem đây là dữ liệu để điều chỉnh chiến lược', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi một quyết định không mang lại kết quả mong muốn, bạn...',
+        answers: [
+          { text: 'Tìm nguyên nhân từ bên ngoài (thị trường, hệ thống, nhân viên)', value: 1 },
+          { text: 'Có xu hướng đổ lỗi nhưng sau đó sẽ nhìn lại', value: 2 },
+          { text: 'Nhìn nhận cả phần trách nhiệm của mình và hoàn cảnh', value: 3 },
+          { text: 'Tự nhận trách nhiệm chính và rút kinh nghiệm', value: 4 },
+          { text: 'Xem thất bại là bài học quý, không đổ lỗi, tập trung giải pháp', value: 5 }
+        ]
+      },
+      {
+        text: 'Trong giao tiếp khi có xung đột (với nhân viên, khách hàng, hệ thống)...',
+        answers: [
+          { text: 'Thường để cảm xúc chi phối, phản ứng mạnh', value: 1 },
+          { text: 'Đôi khi mất bình tĩnh nhưng sau đó hối hận', value: 2 },
+          { text: 'Cố gắng kiểm soát, đôi khi vẫn bị ảnh hưởng', value: 3 },
+          { text: 'Giữ bình tĩnh trong hầu hết tình huống', value: 4 },
+          { text: 'Luôn bình tĩnh, lắng nghe trước, phản hồi sau khi đã suy nghĩ kỹ', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Một đối tác với độ đồng cảm cao chia sẻ: "Giữ tinh thần ổn định trong mọi tình huống là chìa khóa. Khi mình bình tĩnh, nhân viên cũng yên tâm, và khách hàng cảm nhận được điều đó."',
+    learning: {
+      why: 'Cảm xúc tiêu cực lan truyền nhanh hơn bạn nghĩ. Khi chủ cửa hàng stress, nhân viên lo lắng, phục vụ kém, khách hàng không quay lại. Ngược lại, năng lượng tích cực tạo ra vòng lặp tốt.',
+      signs: ['Nhân viên thoải mái chia sẻ vấn đề với bạn', 'Bạn có thể phân tích lỗi sai mà không cần tìm người đổ lỗi', 'Sau mỗi khủng hoảng, bạn rút ra bài học thay vì nỗi sợ'],
+      tips: ['Khi cảm xúc lên cao, cho mình 24 giờ trước khi phản hồi các vấn đề không cấp bách', 'Tập thói quen hỏi "Tôi học được gì?" thay vì "Ai gây ra điều này?"', 'Xây dựng cơ chế giải tỏa stress cá nhân: tập thể dục, trò chuyện, sở thích riêng'],
+      reflection: 'Lần gần nhất bạn mất bình tĩnh trong công việc là khi nào? Nếu quay lại lúc đó, bạn sẽ xử lý khác không?'
+    }
+  },
+  {
+    id: 'customer',
+    name: 'Hướng về Khách hàng',
+    icon: '\u2764\uFE0F',
+    shortDesc: 'Hiếu khách, thấu hiểu, đặt trải nghiệm khách hàng lên ưu tiên.',
+    fullDesc: 'Đối tác thành công không chỉ bán trà sữa — họ tạo trải nghiệm. Họ thực sự yêu thích việc phục vụ, lắng nghe khách hàng, và sẵn sàng hy sinh lợi ích ngắn hạn để khách hàng hài lòng.',
+    scenario: 'Một khách hàng quen ghé lại quán và cho biết ly trà sữa hôm trước không ngon như mọi khi. Khách không yêu cầu đổi hay hoàn tiền, chỉ muốn chia sẻ. Đồng thời, bạn đang xem xét có nên giảm khẩu phần topping để tiết kiệm chi phí.',
+    questions: [
+      {
+        text: 'Khi phải chọn giữa tiết kiệm chi phí và giữ chất lượng phục vụ...',
+        answers: [
+          { text: 'Ưu tiên cắt chi phí, khách sẽ không nhận ra sự khác biệt', value: 1 },
+          { text: 'Cắt giảm ở những chỗ ít ảnh hưởng nhất', value: 2 },
+          { text: 'Cân nhắc kỹ, cố gắng cân bằng cả hai', value: 3 },
+          { text: 'Ưu tiên giữ chất lượng, tìm cách tiết kiệm ở chỗ khác', value: 4 },
+          { text: 'Không bao giờ thỏa hiệp chất lượng trải nghiệm khách hàng', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi khách hàng phàn nàn (dù có lý hay không), phản ứng đầu tiên...',
+        answers: [
+          { text: 'Giải thích hoặc phân bua ngay', value: 1 },
+          { text: 'Lắng nghe nhưng trong lòng không đồng ý', value: 2 },
+          { text: 'Lắng nghe và cố gắng giải quyết ngay', value: 3 },
+          { text: 'Lắng nghe, thấu hiểu, và đứng về phía khách hàng', value: 4 },
+          { text: 'Xem mỗi lời phàn nàn là cơ hội cải thiện, chủ động follow-up', value: 5 }
+        ]
+      },
+      {
+        text: 'Về mong muốn phục vụ khách hàng, bạn cảm thấy thế nào?',
+        answers: [
+          { text: 'Khách hàng là nguồn thu, phục vụ ở mức cơ bản là đủ', value: 1 },
+          { text: 'Phục vụ tốt khi có thời gian và nguồn lực', value: 2 },
+          { text: 'Muốn khách hài lòng, cố gắng phục vụ tốt', value: 3 },
+          { text: 'Thật sự vui khi được phục vụ khách hàng tốt', value: 4 },
+          { text: 'Đam mê phục vụ, mong muốn mỗi khách rời đi đều hạnh phúc', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Đối tác "hiếu khách" nhất hệ thống chia sẻ: "Tôi thích được phục vụ khách. Khi khách vui, mọi thứ đều tốt lên. Cách tôi quan tâm khiến những người xung quanh thương và giúp cho cửa hàng."',
+    learning: {
+      why: 'Trong thị trường F&B, sản phẩm có thể sao chép, nhưng trải nghiệm thì không. Khách hàng quay lại không chỉ vì ly trà ngon, mà vì cảm giác được quan tâm và chào đón.',
+      signs: ['Khách hàng quen biết tên bạn và nhân viên', 'Bạn nhận được nhiều review tốt về dịch vụ', 'Khách hàng chủ động giới thiệu quán cho bạn bè'],
+      tips: ['Học thuộc tên và sở thích của 20 khách hàng quen đầu tiên', 'Khi khách phàn nàn, phản ứng đầu tiên luôn là "Cảm ơn anh/chị đã chia sẻ"', 'Mỗi tuần tự mình đứng phục vụ ít nhất 1 ca để cảm nhận trải nghiệm khách hàng'],
+      reflection: 'Tuần này, có khách hàng nào rời cửa hàng mà bạn cảm thấy mình chưa phục vụ tốt nhất? Bạn sẽ làm gì khác?'
+    }
+  },
+  {
+    id: 'research',
+    name: 'Nghiên cứu & Cập nhật Thị trường',
+    icon: '\u{1F50D}',
+    shortDesc: 'Quan sát đối thủ, cập nhật xu hướng, chủ động nâng cấp cửa hàng.',
+    fullDesc: 'Thị trường F&B thay đổi liên tục. Đối tác thành công không chỉ "bán hàng" — họ quan sát, nghiên cứu, phân tích đối thủ, cập nhật sản phẩm mới, và liên tục nâng cấp cửa hàng mình.',
+    scenario: 'Gần cửa hàng bạn vừa mở thêm 2 quán trà sữa mới, một quán thuộc chuỗi lớn và một quán local brand đang viral trên TikTok. Đồng thời, Phúc Tea vừa ra mắt 3 sản phẩm mới trong menu mùa hè.',
+    questions: [
+      {
+        text: 'Về việc theo dõi các quán trà sữa/cà phê trong khu vực, bạn...',
+        answers: [
+          { text: 'Hiếm khi quan sát hoặc tìm hiểu đối thủ', value: 1 },
+          { text: 'Thỉnh thoảng nghe qua thông tin từ nhân viên hoặc người khác', value: 2 },
+          { text: 'Đôi khi ghé thăm quán mới mở để xem qua', value: 3 },
+          { text: 'Thường xuyên khảo sát, phân tích giá, menu, dịch vụ của đối thủ', value: 4 },
+          { text: 'Nghiên cứu định kỳ: menu, giá, marketing, dịch vụ, và rút ra bài học', value: 5 }
+        ]
+      },
+      {
+        text: 'Khi Phúc Tea ra sản phẩm mới hoặc cập nhật menu, bạn...',
+        answers: [
+          { text: 'Chờ team thông báo, không chủ động tìm hiểu', value: 1 },
+          { text: 'Đọc qua thông tin khi nhận được', value: 2 },
+          { text: 'Tìm hiểu và thử sản phẩm mới', value: 3 },
+          { text: 'Chủ động thử, đánh giá, và chuẩn bị cho nhân viên', value: 4 },
+          { text: 'Nghiên cứu kỹ, training nhân viên, và lên kế hoạch push sản phẩm mới', value: 5 }
+        ]
+      },
+      {
+        text: 'Về việc nâng cấp và cải thiện cửa hàng, bạn...',
+        answers: [
+          { text: 'Giữ nguyên như ban đầu, ít thay đổi', value: 1 },
+          { text: 'Thay đổi khi hệ thống yêu cầu bắt buộc', value: 2 },
+          { text: 'Đôi khi tự cải thiện dựa trên nhận xét của khách', value: 3 },
+          { text: 'Thường xuyên quan sát thị trường và tự nâng cấp dịch vụ, không gian', value: 4 },
+          { text: 'Liên tục benchmark, học hỏi từ thị trường, chủ động đề xuất ý tưởng mới', value: 5 }
+        ]
+      }
+    ],
+    insight: 'Đối tác "nhạy thị trường" nhất chia sẻ: "Tôi chủ động và nhạy với sự cạnh tranh. Mỗi tuần tôi ghé ít nhất 2 quán đối thủ để quan sát. Biết họ làm gì giúp mình luôn đi trước."',
+    learning: {
+      why: 'Thị trường F&B thay đổi cực nhanh. Đối thủ mới mở liên tục, xu hướng thay đổi theo mùa. Đối tác không cập nhật sẽ dần tụt lại phía sau mà không biết tại sao.',
+      signs: ['Bạn biết tên và đặc điểm của ít nhất 5 đối thủ trong bán kính 1km', 'Bạn thử sản phẩm mới của Phúc Tea trước ngày launch chính thức', 'Cửa hàng bạn luôn có điều gì đó mới mẻ mỗi tháng'],
+      tips: ['Mỗi tuần ghé 1-2 quán đối thủ: ghi nhận menu, giá, dịch vụ, không gian', 'Khi Phúc Tea ra sản phẩm mới: thử → đánh giá → training nhân viên → push marketing', 'Tạo file theo dõi đối thủ: cập nhật mỗi tháng để thấy xu hướng thay đổi'],
+      reflection: 'Bạn có biết quán nào mới mở gần cửa hàng mình trong tháng này không? Menu họ có gì hay mà mình có thể học hỏi?'
+    }
+  }
+];
+
+// ==================== BENCHMARK DATA (#1) ====================
+const BENCHMARK_SCORES = [4.5, 4.2, 4.3, 4.4, 4.5, 4.1, 4.6, 4.3];
+
+// ==================== GOOGLE SHEETS CONFIG ====================
+const SHEETS_API_URL = ''; // Anh sẽ paste URL Apps Script vào đây sau khi tạo
+
+// ==================== APP STATE ====================
+let state = {
+  userName: '',
+  userPhone: '',
+  currentScreen: 'welcome',
+  currentDNA: 0,
+  currentQuestion: 0,
+  answers: {},
+  completedDNAs: [],
+  profileCompleted: false,
+  assessmentHistory: [],
+  continuousMode: false,
+  syncedToSheet: false,
+  shuffledOrders: {}
+};
+
+// ==================== INIT ====================
+function init() {
+  // Try loading by phone first (new format), fallback to old key
+  const oldSaved = localStorage.getItem('phuctea_dna_state');
+  if (oldSaved) {
+    try {
+      const parsed = JSON.parse(oldSaved);
+      state = { ...state, ...parsed };
+      // Migrate old data to phone-based key if phone exists
+      if (state.userPhone) {
+        localStorage.setItem('phuctea_dna_' + state.userPhone, JSON.stringify(state));
+        localStorage.removeItem('phuctea_dna_state');
+      }
+      if (state.userName) {
+        showScreen('overview');
+        return;
+      }
+    } catch(e) {}
+  }
+  showScreen('welcome');
+}
+
+function saveState() {
+  state.lastUpdated = new Date().toISOString();
+  const key = state.userPhone ? 'phuctea_dna_' + state.userPhone : 'phuctea_dna_state';
+  localStorage.setItem(key, JSON.stringify(state));
+}
+
+function loadStateByPhone(phone) {
+  const saved = localStorage.getItem('phuctea_dna_' + phone);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      state = { ...state, ...parsed };
+      return true;
+    } catch(e) {}
+  }
+  return false;
+}
+
+// ==================== NAVIGATION ====================
+function showScreen(name) {
+  state.currentScreen = name;
+  window.scrollTo(0, 0);
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+  const screenMap = {
+    welcome: 'screenWelcome',
+    overview: 'screenOverview',
+    assessment: 'screenAssessment',
+    result: 'screenResult',
+    learning: 'screenLearning'
+  };
+  const el = document.getElementById(screenMap[name]);
+  if (el) el.classList.add('active');
+
+  // Show/hide bottom nav and header progress
+  const showNav = ['overview', 'result', 'learning'].includes(name);
+  document.getElementById('bottomNav').style.display = showNav ? 'flex' : 'none';
+  document.getElementById('headerProgress').style.display =
+    name !== 'welcome' ? 'flex' : 'none';
+  const tagline = document.getElementById('logoTagline');
+  if (tagline) tagline.style.display = name === 'welcome' ? 'inline' : 'none';
+
+  // Show/hide header back arrow for assessment
+  let backBtn = document.getElementById('headerBackBtn');
+  if (name === 'assessment') {
+    if (!backBtn) {
+      backBtn = document.createElement('button');
+      backBtn.id = 'headerBackBtn';
+      backBtn.className = 'header-back';
+      backBtn.innerHTML = '&#8592;';
+      backBtn.onclick = () => showScreen('overview');
+      document.getElementById('appHeader').insertBefore(backBtn, document.getElementById('appHeader').firstChild);
+    }
+    backBtn.style.display = 'block';
+  } else if (backBtn) {
+    backBtn.style.display = 'none';
+  }
+
+  // Update bottom nav active
+  document.querySelectorAll('.bottom-nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.screen === name);
+  });
+
+  // Render content
+  if (name === 'overview') renderOverview();
+  if (name === 'assessment') renderAssessment();
+  if (name === 'result') renderResult();
+  if (name === 'learning') renderLearning();
+
+  updateHeaderProgress();
+  window.scrollTo(0, 0);
+  saveState();
+}
+
+function navigateTo(screen) {
+  showScreen(screen);
+}
+
+function goHome() {
+  showScreen('welcome');
+}
+
+function updateHeaderProgress() {
+  const count = state.completedDNAs.length;
+  const pct = (count / 8) * 100;
+  document.getElementById('headerProgressText').textContent = count + '/8';
+  document.getElementById('headerProgressFill').style.width = pct + '%';
+}
+
+// ==================== WELCOME ====================
+function startJourney() {
+  const name = document.getElementById('userName').value.trim();
+  const phone = document.getElementById('userPhone').value.trim().replace(/\D/g, '');
+  if (!name) {
+    document.getElementById('userName').focus();
+    document.getElementById('userName').style.borderColor = '#ef4444';
+    setTimeout(() => document.getElementById('userName').style.borderColor = '', 1500);
+    return;
+  }
+  if (!phone || phone.length < 9) {
+    document.getElementById('userPhone').focus();
+    document.getElementById('userPhone').style.borderColor = '#ef4444';
+    setTimeout(() => document.getElementById('userPhone').style.borderColor = '', 1500);
+    return;
+  }
+  // Check if returning user
+  if (loadStateByPhone(phone)) {
+    state.userName = name; // Update name in case changed
+    state.userPhone = phone;
+  } else {
+    state.userName = name;
+    state.userPhone = phone;
+  }
+  saveState();
+  showScreen('overview');
+}
+
+// ==================== OVERVIEW ====================
+function renderOverview() {
+  const grid = document.getElementById('dnaGrid');
+  const completed = state.completedDNAs;
+  const count = completed.length;
+  document.getElementById('overviewProgressCount').textContent = count + '/8 DNA';
+  document.getElementById('overviewProgressFill').style.width = ((count/8)*100) + '%';
+
+  // #3: Show/hide intro
+  const introEl = document.getElementById('overviewIntro');
+  if (introEl) introEl.style.display = count < 8 ? 'block' : 'none';
+
+  // #8: Show/hide DNA order hint
+  const hintEl = document.getElementById('dnaOrderHint');
+  if (hintEl) hintEl.style.display = count < 3 ? 'block' : 'none';
+
+  // #5 & #8: Cards with review mode for completed, foundation badge
+  grid.innerHTML = DNA_DATA.map((dna, i) => {
+    const isDone = completed.includes(i);
+    const isFoundation = i === 0;
+    const clickAction = isDone ? `reviewDNA(${i})` : `startDNA(${i})`;
+    return `
+      <div class="dna-card ${isDone ? 'completed' : ''}" onclick="${clickAction}">
+        <div class="dna-card-icon">${dna.icon}</div>
+        <div class="dna-card-content">
+          <div class="dna-card-name">
+            ${dna.name}
+            ${isFoundation && !isDone ? '<span class="dna-foundation-badge">Nền tảng</span>' : ''}
+          </div>
+          <div class="dna-card-desc">${isDone ? 'Tap để xem lại câu trả lời' : dna.shortDesc}</div>
+        </div>
+        <span class="dna-card-status ${isDone ? 'done' : 'pending'}">
+          ${isDone ? '\u2713' : (i+1)}
+        </span>
+      </div>
+    `;
+  }).join('');
+
+  const cta = document.getElementById('overviewCta');
+  if (count === 8 && !state.profileCompleted) {
+    cta.innerHTML = '<button class="btn btn-gold btn-lg" onclick="showScreen(\'result\')">Xem Hồ Sơ DNA Của Bạn</button>';
+  } else if (count === 8) {
+    cta.innerHTML = `
+      <button class="btn btn-outline" onclick="showScreen('result')">Xem Lại Hồ Sơ DNA</button>
+      <div class="reset-section">
+        <button class="reset-link" onclick="resetApp()">Khám phá lại từ đầu</button>
+      </div>
+    `;
+  } else {
+    const next = findNextDNA();
+    cta.innerHTML = `<button class="btn btn-primary btn-lg" onclick="startDNA(${next})">
+      ${count === 0 ? 'Bắt Đầu Khám Phá' : 'Tiếp Tục Hành Trình'}
+    </button>`;
+  }
+}
+
+function findNextDNA() {
+  for (let i = 0; i < 8; i++) {
+    if (!state.completedDNAs.includes(i)) return i;
+  }
+  return 0;
+}
+
+// ==================== ASSESSMENT ====================
+function startDNA(index) {
+  state.currentDNA = index;
+  state.currentQuestion = 0;
+  if (!state.answers[index]) state.answers[index] = [];
+  // Generate shuffled orders for this DNA if not exists
+  if (!state.shuffledOrders[index]) {
+    state.shuffledOrders[index] = {};
+    DNA_DATA[index].questions.forEach((q, qi) => {
+      const order = q.answers.map((_, ai) => ai);
+      shuffleArray(order);
+      state.shuffledOrders[index][qi] = order;
+    });
+    saveState();
+  }
+  showScreen('assessment');
+}
+
+// Fisher-Yates shuffle
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Bold the first keyword/phrase of an answer text
+function boldFirstKeyword(text) {
+  // Bold text before the first comma or first 2-3 words
+  const commaIdx = text.indexOf(',');
+  if (commaIdx > 0 && commaIdx < 40) {
+    return '<strong>' + text.substring(0, commaIdx) + '</strong>' + text.substring(commaIdx);
+  }
+  const words = text.split(' ');
+  if (words.length <= 3) return '<strong>' + text + '</strong>';
+  const boldPart = words.slice(0, 2).join(' ');
+  const rest = words.slice(2).join(' ');
+  return '<strong>' + boldPart + '</strong> ' + rest;
+}
+
+function renderAssessment() {
+  const dna = DNA_DATA[state.currentDNA];
+  const qIndex = state.currentQuestion;
+  const q = dna.questions[qIndex];
+  const selectedValue = state.answers[state.currentDNA]?.[qIndex];
+  const totalQ = dna.questions.length;
+  const el = document.getElementById('assessmentContent');
+
+  const qDots = Array.from({length: totalQ}, (_, i) => {
+    const cls = i < qIndex ? 'done' : i === qIndex ? 'active' : '';
+    return `<div class="q-dot ${cls}"></div>`;
+  }).join('');
+
+  // Get shuffled answer order
+  const shuffledOrder = state.shuffledOrders?.[state.currentDNA]?.[qIndex] || q.answers.map((_, i) => i);
+
+  // Collapsible scenario: show on Q1, collapsed on others
+  const scenarioCollapsed = qIndex > 0 ? 'collapsed' : '';
+
+  el.innerHTML = `
+    <button class="assessment-back-btn" onclick="showScreen('overview')">&#8592; Quay lại Tổng quan</button>
+    <div class="assessment-header">
+      <div class="assessment-dna-badge">${dna.icon} DNA ${state.currentDNA + 1}/8</div>
+      <h2>${dna.name}</h2>
+      ${qIndex === 0 ? `<p>${dna.fullDesc}</p>` : ''}
+    </div>
+    <div class="scenario-box ${scenarioCollapsed}" id="scenarioBox">
+      <div class="scenario-label">Hãy tưởng tượng...</div>
+      <p>${dna.scenario}</p>
+      <button class="scenario-toggle" onclick="document.getElementById('scenarioBox').classList.toggle('collapsed')">
+        <span>${scenarioCollapsed ? 'Xem tình huống ▼' : 'Thu gọn ▲'}</span>
+      </button>
+    </div>
+    <div class="assessment-question-progress">${qDots}</div>
+    <div class="question-block slide-right" id="questionBlock">
+      <div class="question-number">Câu hỏi ${qIndex + 1} / ${totalQ}</div>
+      <div class="question-text">${q.text}</div>
+      <div class="answer-options">
+        ${shuffledOrder.map(ai => {
+          const a = q.answers[ai];
+          return `
+          <div class="answer-card ${selectedValue === a.value ? 'selected' : ''}"
+               onclick="selectAnswer(${a.value})">
+            <div class="answer-dot"></div>
+            <div class="answer-text">${boldFirstKeyword(a.text)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    ${qIndex === totalQ - 1 && selectedValue ? `
+      <div class="insight-box">
+        <div class="insight-label">💡 Insight từ đối tác thành công</div>
+        <p>${dna.insight}</p>
+      </div>
+    ` : ''}
+    <div class="assessment-nav">
+      ${qIndex > 0 ? '<button class="btn btn-ghost" onclick="prevQuestion()">← Quay lại</button>' : ''}
+      ${qIndex < totalQ - 1 ?
+        `<button class="btn btn-primary" onclick="nextQuestion()" ${!selectedValue ? 'disabled' : ''}>
+          Tiếp theo →
+        </button>` :
+        `<button class="btn btn-gold btn-lg" onclick="completeDNA()" ${!selectedValue ? 'disabled' : ''}>
+          Hoàn thành DNA này
+        </button>`
+      }
+    </div>
+  `;
+}
+
+function selectAnswer(value) {
+  if (!state.answers[state.currentDNA]) state.answers[state.currentDNA] = [];
+  state.answers[state.currentDNA][state.currentQuestion] = value;
+  saveState();
+  renderAssessment();
+}
+
+function nextQuestion() {
+  if (!state.answers[state.currentDNA]?.[state.currentQuestion]) return;
+  state.currentQuestion++;
+  renderAssessment();
+  window.scrollTo(0, 0);
+}
+
+function prevQuestion() {
+  if (state.currentQuestion > 0) {
+    state.currentQuestion--;
+    renderAssessment();
+    window.scrollTo(0, 0);
+  }
+}
+
+function completeDNA() {
+  const idx = state.currentDNA;
+  if (!state.completedDNAs.includes(idx)) {
+    state.completedDNAs.push(idx);
+    state.completedDNAs.sort((a,b) => a-b);
+  }
+
+  if (state.completedDNAs.length === 8) {
+    state.profileCompleted = true;
+    // Save to assessment history
+    const scores = DNA_DATA.map((_, i) => {
+      const ans = state.answers[i] || [];
+      return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
+    });
+    const archetype = calculateArchetype(scores);
+    state.assessmentHistory.push({
+      date: new Date().toISOString(),
+      scores: scores,
+      answers: JSON.parse(JSON.stringify(state.answers)),
+      archetype: archetype.name,
+      avgScore: scores.reduce((s, v) => s + v, 0) / scores.filter(s => s > 0).length
+    });
+  }
+  saveState();
+  syncToGoogleSheets();
+
+  // Smart celebration
+  showCelebration(idx);
+}
+
+// ==================== ARCHETYPE CALCULATION ====================
+function calculateArchetype(scores) {
+  const s = {};
+  DNA_DATA.forEach((d, i) => { s[d.id] = scores[i]; });
+  const growthScore = ((s.strategic || 0) + (s.decisive || 0) + (s.research || 0)) / 3;
+  const harmonyScore = ((s.commitment || 0) + (s.winwin || 0) + (s.communication || 0)) / 3;
+  const customerScore = ((s.customer || 0) + (s.emotional || 0) + (s.decisive || 0)) / 3;
+
+  const clusters = [
+    { id: 'tan-cong-tang-truong', name: 'Chủ Tấn Công Tăng Trưởng', score: growthScore, desc: 'Quyết đoán, tư duy chiến lược, đón đầu thị trường' },
+    { id: 'hai-hoa-ben-vung', name: 'Chủ Hài Hoà Bền Vững', score: harmonyScore, desc: 'Đồng cảm, ổn định, xây dựng cùng hệ thống' },
+    { id: 'hieu-khach-hanh-dong', name: 'Chủ Hiếu Khách Hành Động', score: customerScore, desc: 'Khách hàng trung tâm, hành động nhanh' }
+  ];
+  clusters.sort((a, b) => b.score - a.score);
+
+  // Tie-breaking: if top 2 are within 0.2, mark as blend
+  if (clusters[0].score - clusters[1].score < 0.2) {
+    return { ...clusters[0], blend: clusters[1].name };
+  }
+  return clusters[0];
+}
+
+// ==================== GOOGLE SHEETS SYNC ====================
+function syncToGoogleSheets() {
+  if (!SHEETS_API_URL) return; // Skip if not configured
+  const scores = DNA_DATA.map((_, i) => {
+    const ans = state.answers[i] || [];
+    return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
+  });
+  const completedCount = state.completedDNAs.length;
+  const avgScore = scores.filter(s => s > 0).length > 0
+    ? scores.filter(s => s > 0).reduce((s, v) => s + v, 0) / scores.filter(s => s > 0).length : 0;
+  const archetype = completedCount === 8 ? calculateArchetype(scores) : null;
+
+  const payload = {
+    timestamp: new Date().toISOString(),
+    name: state.userName,
+    phone: state.userPhone,
+    scores: scores,
+    avgScore: avgScore.toFixed(2),
+    archetype: archetype ? archetype.name : '',
+    status: completedCount + '/8',
+    completedDNAs: state.completedDNAs,
+    answers: JSON.stringify(state.answers)
+  };
+
+  fetch(SHEETS_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    state.syncedToSheet = true;
+    saveState();
+  }).catch(() => {});
+}
+
+// ==================== RESULT ====================
+function renderResult() {
+  const el = document.getElementById('resultContent');
+  const scores = DNA_DATA.map((_, i) => {
+    const ans = state.answers[i] || [];
+    if (ans.length === 0) return 0;
+    return ans.reduce((s, v) => s + (v || 0), 0) / ans.length;
+  });
+
+  const hasData = scores.some(s => s > 0);
+  if (!hasData) {
+    el.innerHTML = `
+      <div class="result-header">
+        <h2>Hồ sơ DNA của bạn</h2>
+        <p>Bạn chưa hoàn thành bất kỳ DNA nào. Hãy quay lại và bắt đầu khám phá!</p>
+      </div>
+      <div style="text-align:center; margin-top:24px;">
+        <button class="btn btn-primary btn-lg" onclick="showScreen('overview')">Bắt đầu khám phá</button>
+      </div>
+    `;
+    return;
+  }
+
+  const sorted = scores.map((s, i) => ({score: s, index: i, name: DNA_DATA[i].name, icon: DNA_DATA[i].icon}))
+    .filter(x => x.score > 0)
+    .sort((a,b) => b.score - a.score);
+  const strengths = sorted.slice(0, 3);
+  // Show ALL DNAs below benchmark
+  const develops = sorted.filter(s => s.score < BENCHMARK_SCORES[s.index]).sort((a,b) => a.score - b.score);
+  const avgScore = sorted.length > 0 ? sorted.reduce((s,x) => s + x.score, 0) / sorted.length : 0;
+  const archetype = state.completedDNAs.length === 8 ? calculateArchetype(scores) : null;
+
+  // Build comparison table rows
+  const comparisonRows = DNA_DATA.map((dna, i) => {
+    const score = scores[i];
+    if (score === 0) return '';
+    const bmk = BENCHMARK_SCORES[i];
+    const diff = score - bmk;
+    const diffColor = diff >= 0 ? 'var(--green)' : '#e67e22';
+    const diffSign = diff >= 0 ? '+' : '';
+    const level = score >= 4.1 ? 'Xuất sắc' : score >= 3.1 ? 'Tốt' : score >= 2.1 ? 'Tiềm năng' : 'Đang phát triển';
+    return `<tr>
+      <td style="padding:8px 6px;font-size:13px;font-weight:500;">${dna.icon} ${dna.name}</td>
+      <td style="padding:8px 6px;text-align:center;font-weight:700;color:var(--green);">${score.toFixed(1)}</td>
+      <td style="padding:8px 6px;text-align:center;color:var(--gray-400);">${bmk}</td>
+      <td style="padding:8px 6px;text-align:center;font-weight:600;color:${diffColor};">${diffSign}${diff.toFixed(1)}</td>
+      <td style="padding:8px 6px;text-align:center;font-size:12px;">${level}</td>
+    </tr>`;
+  }).join('');
+
+  // Assessment history section
+  let historyHTML = '';
+  if (state.assessmentHistory.length > 0) {
+    historyHTML = `
+    <div class="result-summary" style="margin-top:20px;">
+      <h3>Lịch sử đánh giá</h3>
+      ${state.assessmentHistory.map((h, hi) => {
+        const d = new Date(h.date);
+        const dateStr = d.toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit',year:'numeric'});
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--gray-700);">Lần ${hi + 1} — ${dateStr}</div>
+            <div style="font-size:12px;color:var(--gray-400);">${h.archetype || ''}</div>
+          </div>
+          <div style="font-size:16px;font-weight:700;color:var(--green);">${h.avgScore ? Number(h.avgScore).toFixed(1) : '-'}/5.0</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="result-header">
+      <h2>${state.userName}, đây là Hồ Sơ DNA của bạn</h2>
+      <p>Kết quả được tổng hợp từ ${state.completedDNAs.length}/8 DNA đã khám phá</p>
+    </div>
+    ${archetype ? `
+    <div style="background:linear-gradient(135deg, var(--green-pale), var(--gold-pale)); border-radius:var(--radius-lg); padding:20px 24px; margin-bottom:20px; text-align:center;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gold);letter-spacing:0.5px;margin-bottom:6px;">Archetype của bạn</div>
+      <div style="font-size:20px;font-weight:800;color:var(--green);margin-bottom:4px;">${archetype.name}</div>
+      <div style="font-size:13px;color:var(--gray-600);line-height:1.6;">${archetype.desc}</div>
+      ${archetype.blend ? `<div style="font-size:12px;color:var(--gray-400);margin-top:4px;">Kết hợp: ${archetype.blend}</div>` : ''}
+    </div>` : ''}
+    <div class="radar-container">
+      <canvas id="radarCanvas" class="radar-canvas" width="480" height="500"></canvas>
+      <div class="radar-legend">
+        <div class="radar-legend-item">
+          <div class="radar-legend-line user"></div>
+          <span>Điểm của bạn</span>
+        </div>
+        <div class="radar-legend-item">
+          <div class="radar-legend-line benchmark"></div>
+          <span>Chuẩn Chủ Phúc Tea</span>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--gray-400);margin-top:8px;font-style:italic;">Dựa trên đánh giá nhóm đối tác doanh thu dẫn đầu hệ thống, 2023-2025</div>
+    </div>
+    <!-- Comparison table -->
+    <div class="result-summary">
+      <h3>Bảng so sánh chi tiết</h3>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--gray-200);">
+              <th style="padding:8px 6px;text-align:left;font-size:12px;color:var(--gray-400);font-weight:600;">DNA</th>
+              <th style="padding:8px 6px;text-align:center;font-size:12px;color:var(--gray-400);font-weight:600;">Bạn</th>
+              <th style="padding:8px 6px;text-align:center;font-size:12px;color:var(--gray-400);font-weight:600;">Chuẩn Chủ</th>
+              <th style="padding:8px 6px;text-align:center;font-size:12px;color:var(--gray-400);font-weight:600;">+/-</th>
+              <th style="padding:8px 6px;text-align:center;font-size:12px;color:var(--gray-400);font-weight:600;">Mức độ</th>
+            </tr>
+          </thead>
+          <tbody>${comparisonRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="result-summary">
+      <h3>Điểm mạnh nổi bật</h3>
+      <ul class="strength-list">
+        ${strengths.map(s => `
+          <li>
+            <span class="score-badge">${s.score.toFixed(1)}</span>
+            <span>${s.icon} ${s.name}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+    ${develops.length > 0 ? `
+    <div class="result-summary">
+      <h3>Cơ hội phát triển</h3>
+      <ul class="develop-list">
+        ${develops.map(s => `
+          <li>
+            <span class="score-badge">${s.score.toFixed(1)}</span>
+            <span style="flex:1;">${s.icon} ${s.name}</span>
+            <button class="develop-link-btn" onclick="goToLearningDNA(${s.index})">Phát triển &#8594;</button>
+          </li>
+        `).join('')}
+      </ul>
+    </div>` : ''}
+    <div class="dna-breakdown">
+      ${DNA_DATA.map((dna, i) => {
+        const score = scores[i];
+        const pct = (score / 5) * 100;
+        const bmk = BENCHMARK_SCORES[i];
+        const bmkPct = (bmk / 5) * 100;
+        const level = score >= 4.1 ? 'Xuất sắc' : score >= 3.1 ? 'Tốt' : score >= 2.1 ? 'Tiềm năng' : score > 0 ? 'Đang phát triển' : 'Chưa đánh giá';
+        const levelClass = score >= 4.1 ? 'level-excellent' : score >= 3.1 ? 'level-good' : score >= 2.1 ? 'level-potential' : 'level-developing';
+        return `
+          <div class="dna-score-card">
+            <div class="dna-score-header">
+              <div class="dna-score-name">${dna.icon} ${dna.name}</div>
+              <div class="dna-score-value">${score > 0 ? score.toFixed(1) : '-'}</div>
+            </div>
+            <div class="dna-score-bar" style="position:relative;">
+              <div class="dna-score-bar-fill" style="width:${pct}%"></div>
+              <div style="position:absolute; left:${bmkPct}%; top:-3px; width:2px; height:12px; background:var(--gold); border-radius:1px;" title="Chuẩn Chủ: ${bmk}"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="dna-score-level ${levelClass}">${level}</span>
+              <span style="font-size:11px; color:var(--gray-400);">Chuẩn Chủ: ${bmk}</span>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    ${historyHTML}
+    <!-- Reflection -->
+    <div class="reflection-section">
+      <h3>Suy ngẫm cá nhân</h3>
+      <p>Nhìn vào hồ sơ DNA, bạn bất ngờ ở điểm nào?<br>Điều gì khiến bạn muốn tìm hiểu thêm?</p>
+      <textarea class="reflection-textarea" placeholder="Ghi lại suy nghĩ của bạn... (chỉ lưu trên thiết bị này)"></textarea>
+    </div>
+    <div class="insight-box" style="margin-top:24px;">
+      <div class="insight-label">💡 Lưu ý</div>
+      <p>Đây không phải bài kiểm tra đúng sai. Kết quả phản ánh nhận thức hiện tại của bạn. Để khách quan hơn, hãy nhờ quản lý hoặc team hỗ trợ đánh giá bạn cùng bộ câu hỏi này.</p>
+    </div>
+    <!-- CTA -->
+    <div class="cta-final">
+      <h3>Bước tiếp theo</h3>
+      <p>Hãy biến nhận thức thành hành động cụ thể</p>
+      <button class="btn btn-primary btn-full" onclick="showScreen('learning')">
+        Khám phá Kho Học Liệu
+      </button>
+      <button class="btn btn-outline btn-full" onclick="exportRadarImage()">
+        Tải ảnh kết quả
+      </button>
+      <button class="btn btn-outline btn-full" onclick="shareDNAProfile()">
+        Chia sẻ kết quả
+      </button>
+      ${state.completedDNAs.length < 8 ? '<button class="btn btn-ghost btn-full" onclick="showScreen(\'overview\')">Tiếp tục khám phá DNA còn lại</button>' : ''}
+    </div>
+    <!-- Reset -->
+    <div class="reset-section">
+      <button class="reset-link" onclick="resetApp()">Khám phá lại từ đầu</button>
+    </div>
+  `;
+
+  setTimeout(() => drawRadarChart(scores), 100);
+}
+
+function drawRadarChart(scores) {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const containerW = canvas.parentElement.offsetWidth - 16;
+  const size = Math.min(containerW, 500);
+  canvas.width = size * dpr;
+  canvas.height = (size + 20) * dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = (size + 20) + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const cx = size / 2;
+  const cy = size / 2 + 10;
+  const maxR = size / 2 - 95;
+  const n = 8;
+  const step = (2 * Math.PI) / n;
+
+  // Background levels
+  for (let lv = 1; lv <= 5; lv++) {
+    const r = (lv / 5) * maxR;
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const a = i * step - Math.PI / 2;
+      const x = cx + r * Math.cos(a);
+      const y = cy + r * Math.sin(a);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = lv === 5 ? '#d1d5db' : '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    if (lv % 2 === 0) {
+      ctx.fillStyle = 'rgba(232,245,238,0.15)';
+      ctx.fill();
+    }
+  }
+
+  // Axis lines
+  for (let i = 0; i < n; i++) {
+    const a = i * step - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // #1: Benchmark polygon (behind user data)
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) {
+    const a = i * step - Math.PI / 2;
+    const r = (BENCHMARK_SCORES[i] / 5) * maxR;
+    const x = cx + r * Math.cos(a);
+    const y = cy + r * Math.sin(a);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(201,168,76,0.08)';
+  ctx.fill();
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = 'rgba(201,168,76,0.6)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Data polygon
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) {
+    const a = i * step - Math.PI / 2;
+    const r = (scores[i] / 5) * maxR;
+    const x = cx + r * Math.cos(a);
+    const y = cy + r * Math.sin(a);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(26,92,56,0.12)';
+  ctx.fill();
+  ctx.strokeStyle = '#1a5c38';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Data points
+  for (let i = 0; i < n; i++) {
+    const a = i * step - Math.PI / 2;
+    const r = (scores[i] / 5) * maxR;
+    const x = cx + r * Math.cos(a);
+    const y = cy + r * Math.sin(a);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    ctx.fillStyle = '#1a5c38';
+    ctx.fill();
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  // Labels
+  const labels = DNA_DATA.map(d => d.name);
+  ctx.font = '600 11px "Be Vietnam Pro", sans-serif';
+  ctx.fillStyle = '#374151';
+  for (let i = 0; i < n; i++) {
+    const a = i * step - Math.PI / 2;
+    const cosA = Math.cos(a);
+    const sinA = Math.sin(a);
+    const lr = maxR + 24;
+    let x = cx + lr * cosA;
+    let y = cy + lr * sinA;
+
+    // Align text based on position around the chart
+    if (cosA < -0.15) {
+      ctx.textAlign = 'right';
+      x -= 4;
+      // Clamp so text doesn't go past left edge
+      const maxTextW = 120;
+      if (x - maxTextW < 2) x = maxTextW + 2;
+    } else if (cosA > 0.15) {
+      ctx.textAlign = 'left';
+      x += 4;
+      // Clamp so text doesn't go past right edge
+      const maxTextW = 120;
+      if (x + maxTextW > size - 2) x = size - maxTextW - 2;
+    } else {
+      ctx.textAlign = 'center';
+    }
+    if (sinA < -0.3) {
+      ctx.textBaseline = 'bottom';
+      y -= 6;
+    } else if (sinA > 0.3) {
+      ctx.textBaseline = 'top';
+      y += 6;
+    } else {
+      ctx.textBaseline = 'middle';
+    }
+
+    // Word wrap with max chars per line
+    let lines = [];
+    const words = labels[i].split(' ');
+    let current = '';
+    words.forEach(w => {
+      const test = (current + ' ' + w).trim();
+      if (test.length > 14 && current) {
+        lines.push(current.trim());
+        current = w;
+      } else {
+        current = test;
+      }
+    });
+    if (current) lines.push(current.trim());
+
+    lines.forEach((line, li) => {
+      ctx.fillText(line, x, y + (li - (lines.length-1)/2) * 14);
+    });
+  }
+}
+
+// ==================== LEARNING HUB ====================
+function renderLearning() {
+  const el = document.getElementById('learningContent');
+  // Find weakest DNA to highlight
+  const scores = DNA_DATA.map((_, i) => {
+    const ans = state.answers[i] || [];
+    return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
+  });
+  const weakest = scores.map((s, i) => ({score: s, index: i}))
+    .filter(x => x.score > 0)
+    .sort((a,b) => a.score - b.score)[0];
+
+  el.innerHTML = `
+    <div class="learning-header">
+      <h2>Kho Học Liệu DNA</h2>
+      <p style="font-size:14px; color:var(--gray-600);">Nội dung chi tiết giúp bạn hiểu sâu và phát triển từng DNA thành công.</p>
+    </div>
+    ${weakest ? `<div style="background:var(--gold-pale);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--gray-700);">
+      💡 <strong>Gợi ý:</strong> DNA cần phát triển nhất của bạn là <strong>${DNA_DATA[weakest.index].name}</strong> (${weakest.score.toFixed(1)}/5.0)
+    </div>` : ''}
+    ${DNA_DATA.map((dna, i) => {
+      const isWeak = weakest && weakest.index === i;
+      return `
+      <div class="learning-card ${isWeak ? 'open' : ''}" id="learn-${i}" ${isWeak ? 'style="border-color:var(--gold);"' : ''}>
+        <div class="learning-card-header" onclick="toggleLearning(${i})">
+          <div class="learning-card-icon">${dna.icon}</div>
+          <div class="learning-card-title">${dna.name}${isWeak ? ' <span style="font-size:10px;background:var(--gold);color:white;padding:2px 8px;border-radius:99px;margin-left:6px;">Ưu tiên</span>' : ''}</div>
+          <div class="learning-card-arrow">▼</div>
+        </div>
+        <div class="learning-card-body">
+          <div class="learning-section">
+            <h4>Tại sao DNA này quan trọng?</h4>
+            <p>${dna.learning.why}</p>
+          </div>
+          <div class="learning-section">
+            <h4>Dấu hiệu bạn có DNA này</h4>
+            <ul>${dna.learning.signs.map(s => `<li>${s}</li>`).join('')}</ul>
+          </div>
+          <div class="learning-section">
+            <h4>Gợi ý phát triển</h4>
+            <ul>${dna.learning.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+          </div>
+          <div class="learning-quote">
+            <p>${dna.learning.reflection}</p>
+          </div>
+          <!-- Checklist 7 ngày -->
+          <div class="learning-section" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-200);">
+            <h4 style="display:flex;align-items:center;gap:8px;">📋 CHECKLIST 7 NGÀY</h4>
+            <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;">Lộ trình thực hành 7 ngày để phát triển DNA này.</p>
+            <div id="checklist-${i}" style="min-height:40px;">
+              <button class="btn btn-outline" style="font-size:13px;padding:10px 16px;" onclick="loadChecklist(${i})">
+                Xem Checklist 7 Ngày →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function toggleLearning(index) {
+  const card = document.getElementById('learn-' + index);
+  card.classList.toggle('open');
+}
+
+// ==================== CHECKLIST 7 NGÀY ====================
+let checklistCache = {};
+
+function loadChecklist(dnaIndex) {
+  const container = document.getElementById('checklist-' + dnaIndex);
+  if (!container) return;
+
+  // Show loading
+  container.innerHTML = '<div style="text-align:center;padding:12px;color:var(--gray-400);font-size:13px;">Đang tải checklist...</div>';
+
+  // DNA 0-3 → file 03a, DNA 4-7 → file 03b
+  const file = dnaIndex < 4 ? 'content/03a-checklist-7days-dna1-4.md' : 'content/03b-checklist-7days-dna5-8.md';
+  const dnaId = DNA_DATA[dnaIndex].id;
+
+  if (checklistCache[dnaIndex]) {
+    renderChecklist(container, checklistCache[dnaIndex], dnaIndex);
+    return;
+  }
+
+  fetch(file)
+    .then(r => r.text())
+    .then(md => {
+      // Extract this DNA's section
+      const dnaName = DNA_DATA[dnaIndex].name.toUpperCase();
+      const sectionRegex = new RegExp(`## CHECKLIST 7 NGÀY:.*?${dnaId}\\)([\\s\\S]*?)(?=## CHECKLIST 7 NGÀY:|$)`, 'i');
+      let match = md.match(sectionRegex);
+      if (!match) {
+        // Try matching by name
+        const nameRegex = new RegExp(`## CHECKLIST 7 NGÀY:.*?\\(DNA \\d+.*?\\)([\\s\\S]*?)(?=## CHECKLIST 7 NGÀY:|$)`, 'gi');
+        const allSections = [...md.matchAll(nameRegex)];
+        const sectionIndex = dnaIndex < 4 ? dnaIndex : dnaIndex - 4;
+        match = allSections[sectionIndex];
+      }
+
+      const content = match ? match[1] || match[0] : 'Không tìm thấy nội dung checklist.';
+      checklistCache[dnaIndex] = content;
+      renderChecklist(container, content, dnaIndex);
+    })
+    .catch(() => {
+      container.innerHTML = '<div style="color:var(--gray-400);font-size:13px;">Không thể tải checklist. Vui lòng thử lại.</div>';
+    });
+}
+
+function renderChecklist(container, mdContent, dnaIndex) {
+  // Parse markdown to HTML
+  let html = mdContent
+    // Headers
+    .replace(/^### (.+)$/gm, '<h5 style="font-size:14px;font-weight:700;color:var(--green);margin:16px 0 8px;">$1</h5>')
+    // Bold
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Blockquotes
+    .replace(/^> (.+)$/gm, '<div style="background:var(--green-pale);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13px;color:var(--green-dark);font-style:italic;">$1</div>')
+    // Tables → simplified list
+    .replace(/\| # \| Micro-task[\s\S]*?\n((?:\|.*\n)*)/g, (match) => {
+      const rows = match.split('\n').filter(r => r.startsWith('|') && !r.includes('---') && !r.includes('Micro-task'));
+      return rows.map(row => {
+        const cells = row.split('|').map(c => c.trim()).filter(c => c);
+        if (cells.length >= 2) {
+          const checkKey = `check_${dnaIndex}_${cells[0]}`;
+          const checked = getChecklistProgress(dnaIndex, cells[0]);
+          return `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+            <input type="checkbox" ${checked ? 'checked' : ''} onchange="saveChecklistProgress(${dnaIndex},'${cells[0]}',this.checked)" style="margin-top:2px;width:18px;height:18px;accent-color:var(--green);flex-shrink:0;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--gray-800);">${cells[1]}</div>
+              ${cells[2] ? `<div style="font-size:12px;color:var(--gray-400);margin-top:2px;">⏱ ${cells[2]}</div>` : ''}
+              ${cells[3] ? `<div style="font-size:12px;color:var(--gray-600);margin-top:4px;line-height:1.5;">${cells[3]}</div>` : ''}
+            </div>
+          </div>`;
+        }
+        return '';
+      }).join('');
+    })
+    // Horizontal rules
+    .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid var(--gray-200);margin:16px 0;">')
+    // Line breaks
+    .replace(/\n\n/g, '<br>')
+    .replace(/\n/g, ' ');
+
+  container.innerHTML = `<div style="font-size:13px;line-height:1.7;color:var(--gray-700);">${html}</div>`;
+}
+
+function getChecklistProgress(dnaIndex, taskId) {
+  const key = 'phuctea_checklist_' + (state.userPhone || 'anon');
+  try {
+    const data = JSON.parse(localStorage.getItem(key) || '{}');
+    return data[dnaIndex + '_' + taskId] || false;
+  } catch(e) { return false; }
+}
+
+function saveChecklistProgress(dnaIndex, taskId, checked) {
+  const key = 'phuctea_checklist_' + (state.userPhone || 'anon');
+  try {
+    const data = JSON.parse(localStorage.getItem(key) || '{}');
+    data[dnaIndex + '_' + taskId] = checked;
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch(e) {}
+}
+
+// ==================== REVIEW MODE (#5) ====================
+function reviewDNA(index) {
+  state.currentDNA = index;
+  state.currentScreen = 'assessment';
+  window.scrollTo(0, 0);
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screenAssessment').classList.add('active');
+  document.getElementById('bottomNav').style.display = 'none';
+  document.getElementById('headerProgress').style.display = 'flex';
+  updateHeaderProgress();
+
+  const dna = DNA_DATA[index];
+  const answers = state.answers[index] || [];
+  const score = answers.reduce((s, v) => s + (v || 0), 0) / answers.length;
+  const level = score >= 4.1 ? 'Xuất sắc' : score >= 3.1 ? 'Tốt' : score >= 2.1 ? 'Tiềm năng' : 'Đang phát triển';
+  const el = document.getElementById('assessmentContent');
+
+  el.innerHTML = `
+    <div class="assessment-header">
+      <div class="review-badge">Xem lại</div>
+      <div class="assessment-dna-badge">${dna.icon} DNA ${index + 1}/8</div>
+      <h2>${dna.name}</h2>
+      <p>Điểm của bạn: <strong style="color:var(--green);font-size:18px;">${score.toFixed(1)}</strong>/5.0 — ${level}</p>
+    </div>
+    <div class="scenario-box">
+      <div class="scenario-label">Tình huống</div>
+      <p>${dna.scenario}</p>
+    </div>
+    ${dna.questions.map((q, qi) => {
+      const selectedValue = answers[qi];
+      return `
+        <div class="review-question-block">
+          <div class="question-number">Câu ${qi + 1} / ${dna.questions.length}</div>
+          <div class="question-text">${q.text}</div>
+          <div class="answer-options">
+            ${q.answers.map(a => `
+              <div class="answer-card ${selectedValue === a.value ? 'selected' : ''}" style="cursor:default; ${selectedValue !== a.value ? 'opacity:0.5;' : ''}">
+                <div class="answer-dot"></div>
+                <div class="answer-text">${a.text}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('')}
+    <div class="insight-box">
+      <div class="insight-label">Insight</div>
+      <p>${dna.insight}</p>
+    </div>
+    <div style="text-align:center; margin-top:24px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="showScreen('overview')">&#8592; Quay lại tổng quan</button>
+      <button class="btn btn-primary" onclick="goToLearningDNA(${index})">Xem học liệu DNA này</button>
+    </div>
+  `;
+}
+
+// ==================== CELEBRATION (#4, #9) ====================
+function showCelebration(dnaIndex) {
+  const dna = DNA_DATA[dnaIndex];
+  const answers = state.answers[dnaIndex] || [];
+  const score = answers.reduce((s, v) => s + (v || 0), 0) / answers.length;
+  const level = score >= 4.1 ? 'Xuất sắc' : score >= 3.1 ? 'Tốt' : score >= 2.1 ? 'Tiềm năng' : 'Đang phát triển';
+  const completed = state.completedDNAs.length;
+  const nextIdx = findNextDNA();
+  const nextDNA = completed < 8 ? DNA_DATA[nextIdx] : null;
+  const isComplete = completed === 8;
+
+  const card = document.getElementById('celebrationCard');
+
+  if (isComplete) {
+    // FULL celebration for 8/8
+    const allScores = DNA_DATA.map((_, i) => {
+      const ans = state.answers[i] || [];
+      return ans.reduce((s, v) => s + (v || 0), 0) / ans.length;
+    });
+    const archetype = calculateArchetype(allScores);
+    card.innerHTML = `
+      <div style="font-size:48px; margin-bottom:8px;">&#x1F3C6;</div>
+      <h2 style="font-size:22px; font-weight:800; color:var(--green); margin-bottom:6px;">Xuất sắc, ${state.userName}!</h2>
+      <p style="font-size:14px; color:var(--gray-600); margin-bottom:16px;">
+        Bạn đã hoàn thành tất cả <strong>8 DNA</strong>!
+      </p>
+      <div style="background:linear-gradient(135deg, var(--green-pale), var(--gold-pale)); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gold);letter-spacing:0.5px;margin-bottom:4px;">Archetype của bạn</div>
+        <div style="font-size:18px;font-weight:800;color:var(--green);">${archetype.name}</div>
+        <div style="font-size:12px;color:var(--gray-600);margin-top:2px;">${archetype.desc}</div>
+      </div>
+      <button class="btn btn-gold btn-lg btn-full" onclick="hideCelebration(); showScreen('result')" style="margin-bottom:10px;">
+        Xem Hồ Sơ DNA Hoàn Chỉnh
+      </button>
+      <button class="btn btn-ghost btn-full" onclick="hideCelebration(); showScreen('overview')">
+        Về tổng quan
+      </button>
+    `;
+    document.getElementById('celebrationOverlay').classList.add('active');
+    launchConfetti();
+  } else {
+    // LIGHT celebration for DNA 1-7
+    card.innerHTML = `
+      <div style="font-size:36px; margin-bottom:8px;">&#x2705;</div>
+      <h2 style="font-size:20px; font-weight:800; color:var(--green); margin-bottom:6px;">${dna.name} hoàn thành!</h2>
+      <div class="celebration-score-ring" style="width:80px;height:80px;">
+        <span class="score-num" style="font-size:24px;">${score.toFixed(1)}</span>
+        <span class="score-max">/5.0</span>
+      </div>
+      <div style="font-size:13px; font-weight:600; color:var(--green); margin-bottom:12px;">${level}</div>
+      <div style="font-size:13px; color:var(--gray-600); margin-bottom:8px;">
+        Tiến trình: <strong>${completed}/8</strong> DNA
+      </div>
+      <div style="background:var(--gray-100); border-radius:8px; height:6px; margin-bottom:16px;">
+        <div style="background:linear-gradient(90deg, var(--green), var(--gold)); height:100%; border-radius:8px; width:${(completed/8)*100}%;"></div>
+      </div>
+      <!-- Continuous mode toggle -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--gray-600);">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+          <input type="checkbox" id="continuousModeToggle" ${state.continuousMode ? 'checked' : ''} onchange="state.continuousMode=this.checked; saveState();" style="width:16px;height:16px;accent-color:var(--green);">
+          Tự động chuyển DNA tiếp theo
+        </label>
+      </div>
+      ${nextDNA ? `
+        <div class="celebration-next-box">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">DNA tiếp theo</div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:24px;">${nextDNA.icon}</span>
+            <div style="text-align:left;">
+              <div style="font-size:14px; font-weight:700; color:var(--gray-800);">${nextDNA.name}</div>
+              <div style="font-size:12px; color:var(--gray-600);">${nextDNA.shortDesc}</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-full" onclick="hideCelebration(); startDNA(${nextIdx})" style="margin-bottom:10px;">
+          Tiếp tục hành trình →
+        </button>
+      ` : ''}
+      <button class="btn btn-ghost btn-full" onclick="hideCelebration(); showScreen('overview')">
+        Về tổng quan
+      </button>
+    `;
+
+    document.getElementById('celebrationOverlay').classList.add('active');
+
+    // Auto-advance if continuous mode is on
+    if (state.continuousMode && nextDNA) {
+      setTimeout(() => {
+        hideCelebration();
+        startDNA(nextIdx);
+      }, 1500);
+    }
+  }
+}
+
+function hideCelebration() {
+  document.getElementById('celebrationOverlay').classList.remove('active');
+}
+
+function launchConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#1a5c38', '#c9a84c', '#f0d98a', '#2d7a50', '#e8f5ee', '#ff6b6b', '#4ecdc4', '#ffe66d'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 2 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    if (Math.random() > 0.5) piece.style.borderRadius = '50%';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 4500);
+}
+
+// ==================== GO TO LEARNING DNA (#2) ====================
+function goToLearningDNA(index) {
+  showScreen('learning');
+  setTimeout(() => {
+    const card = document.getElementById('learn-' + index);
+    if (card) {
+      card.classList.add('open');
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 150);
+}
+
+// ==================== SHARE DNA PROFILE (#7) ====================
+function shareDNAProfile() {
+  const scores = DNA_DATA.map((_, i) => {
+    const ans = state.answers[i] || [];
+    if (ans.length === 0) return 0;
+    return ans.reduce((s, v) => s + (v || 0), 0) / ans.length;
+  });
+  const sorted = scores.map((s, i) => ({score: s, name: DNA_DATA[i].name})).filter(x => x.score > 0);
+  const avg = sorted.length > 0 ? sorted.reduce((s,x) => s + x.score, 0) / sorted.length : 0;
+
+  let text = `Hồ Sơ DNA Đối Tác - ${state.userName}\n`;
+  text += `Điểm trung bình: ${avg.toFixed(1)}/5.0\n\n`;
+  sorted.forEach(x => { text += `${x.name}: ${x.score.toFixed(1)}/5.0\n`; });
+  text += `\nPhúc Tea — DNA Đối Tác Thành Công`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'Hồ Sơ DNA Phúc Tea', text: text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Đã sao chép hồ sơ DNA vào clipboard! Hãy gửi cho team hỗ trợ Phúc Tea.');
+    }).catch(() => {
+      prompt('Sao chép nội dung bên dưới:', text);
+    });
+  }
+}
+
+// ==================== EXPORT RADAR IMAGE ====================
+function exportRadarImage() {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  // Create a new canvas with white background + info
+  const exp = document.createElement('canvas');
+  const dpr = window.devicePixelRatio || 1;
+  exp.width = canvas.width;
+  exp.height = canvas.height + 80 * dpr;
+  const ctx = exp.getContext('2d');
+  ctx.scale(1, 1);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, exp.width, exp.height);
+  // Draw title
+  ctx.font = `bold ${14 * dpr}px "Be Vietnam Pro", sans-serif`;
+  ctx.fillStyle = '#1a5c38';
+  ctx.textAlign = 'center';
+  ctx.fillText(`Hồ Sơ DNA — ${state.userName}`, exp.width / 2, 30 * dpr);
+  ctx.font = `${11 * dpr}px "Be Vietnam Pro", sans-serif`;
+  ctx.fillStyle = '#9ca3af';
+  ctx.fillText('Phúc Tea — DNA Đối Tác Thành Công', exp.width / 2, 50 * dpr);
+  // Draw radar chart
+  ctx.drawImage(canvas, 0, 60 * dpr);
+  // Download
+  const link = document.createElement('a');
+  link.download = `DNA-${state.userName.replace(/\s+/g,'-')}.png`;
+  link.href = exp.toDataURL('image/png');
+  link.click();
+}
+
+// ==================== RESET (#10) ====================
+function resetApp() {
+  if (confirm('Bạn có chắc muốn đánh giá lại từ đầu? Kết quả cũ sẽ được lưu vào lịch sử.')) {
+    // Archive current results before resetting
+    const scores = DNA_DATA.map((_, i) => {
+      const ans = state.answers[i] || [];
+      return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
+    });
+    if (scores.some(s => s > 0) && state.completedDNAs.length > 0) {
+      const archetype = state.completedDNAs.length === 8 ? calculateArchetype(scores) : null;
+      state.assessmentHistory.push({
+        date: new Date().toISOString(),
+        scores: scores,
+        answers: JSON.parse(JSON.stringify(state.answers)),
+        archetype: archetype ? archetype.name : 'Chưa hoàn thành',
+        avgScore: scores.filter(s => s > 0).reduce((s, v) => s + v, 0) / scores.filter(s => s > 0).length
+      });
+    }
+    // Reset assessment data but keep user info and history
+    const history = state.assessmentHistory;
+    const userName = state.userName;
+    const userPhone = state.userPhone;
+    state = {
+      userName, userPhone,
+      currentScreen: 'overview', currentDNA: 0, currentQuestion: 0,
+      answers: {}, completedDNAs: [], profileCompleted: false,
+      assessmentHistory: history,
+      continuousMode: false, syncedToSheet: false, shuffledOrders: {}
+    };
+    saveState();
+    showScreen('overview');
+  }
+}
+
+// ==================== START ====================
+document.addEventListener('DOMContentLoaded', init);
+
+// Handle Enter key on inputs
+document.getElementById('userName')?.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('userPhone')?.focus();
+});
+document.getElementById('userPhone')?.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') startJourney();
+});
+</script>
+</body>
+</html>
