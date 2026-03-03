@@ -224,7 +224,7 @@
       background: var(--white);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: hidden;
+      overflow-x: auto;
     }
     .data-table {
       width: 100%;
@@ -554,7 +554,8 @@ function checkAuth() {
 }
 
 function attemptLogin() {
-  const pw = document.getElementById('adminPassword').value;
+  const pw = document.getElementById('adminPassword').value.trim();
+  document.getElementById('loginError').style.display = 'none';
   if (pw === ADMIN_PASSWORD) {
     sessionStorage.setItem('admin_auth', 'true');
     showDashboard();
@@ -615,7 +616,7 @@ function loadFromLocalStorage() {
           const scores = [];
           if (item.answers) {
             for (let d = 0; d < 8; d++) {
-              const ans = item.answers[d] || [];
+              const ans = Array.isArray(item.answers[d]) ? item.answers[d] : [];
               scores.push(ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0);
             }
           }
@@ -629,7 +630,7 @@ function loadFromLocalStorage() {
             scores: scores,
             avgScore: parseFloat(avgScore.toFixed(2)),
             archetype: item.archetype || '',
-            status: (item.completedDNAs ? item.completedDNAs.length : 0) + '/8',
+            status: (Array.isArray(item.completedDNAs) ? item.completedDNAs.length : 0) + '/8',
             completedDNAs: item.completedDNAs || [],
             answers: item.answers || {},
             assessmentHistory: item.assessmentHistory || []
@@ -678,6 +679,7 @@ function updateStats() {
 
 // ==================== FILTERS ====================
 function applyFilters() {
+  closeDetail(); // Close detail panel when filters change
   const search = document.getElementById('filterSearch').value.toLowerCase().trim();
   const status = document.getElementById('filterStatus').value;
   const score = document.getElementById('filterScore').value;
@@ -1039,7 +1041,9 @@ function exportCSV() {
 
   const headers = ['STT', 'Họ tên', 'SĐT', ...DNA_NAMES.map((n, i) => `DNA${i+1}: ${n}`), 'Điểm TB', 'Archetype', 'Trạng thái', 'Ngày'];
   const rows = allData.map((d, idx) => {
-    const scores = d.scores || [];
+    const rawScores = d.scores || [];
+    // Pad scores array to always have 8 elements
+    const scores = Array.from({length: 8}, (_, i) => rawScores[i] || 0);
     const date = d.timestamp ? new Date(d.timestamp).toLocaleDateString('vi-VN') : '';
     return [
       idx + 1,

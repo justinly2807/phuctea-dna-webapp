@@ -420,7 +420,6 @@
       display: flex; align-items: center; gap: 4px;
     }
     .scenario-box.collapsed p { display: none; }
-    .scenario-box.collapsed .scenario-toggle span::after { content: ' \25BC'; }
     .assessment-back-btn {
       display: inline-flex; align-items: center; gap: 6px;
       background: none; border: none; cursor: pointer;
@@ -927,7 +926,7 @@
   <!-- ==================== HEADER ==================== -->
   <header class="app-header" id="appHeader">
     <div class="logo" onclick="goHome()" title="Về trang chủ">
-      <img src="assets/logo-white.png" alt="Phúc Tea" class="logo-img">
+      <img src="assets/logo-white.png" alt="Phúc Tea" class="logo-img" onerror="this.style.display='none'">
       <span class="logo-tagline" id="logoTagline">Trở thành đối tác thành công!</span>
     </div>
     <div class="header-progress" id="headerProgress" style="display:none;">
@@ -1033,7 +1032,7 @@
   </main>
 
   <!-- ==================== CELEBRATION OVERLAY (#4, #9) ==================== -->
-  <div class="celebration-overlay" id="celebrationOverlay">
+  <div class="celebration-overlay" id="celebrationOverlay" onclick="if(event.target===this) hideCelebration();">
     <div class="celebration-card" id="celebrationCard"></div>
   </div>
 
@@ -1466,14 +1465,20 @@ function init() {
       state = { ...state, ...parsed };
       // Migrate old data to phone-based key if phone exists
       if (state.userPhone) {
-        localStorage.setItem('phuctea_dna_' + state.userPhone, JSON.stringify(state));
-        localStorage.removeItem('phuctea_dna_state');
+        try {
+          localStorage.setItem('phuctea_dna_' + state.userPhone, JSON.stringify(state));
+          localStorage.removeItem('phuctea_dna_state');
+        } catch(e) {
+          console.warn('Không thể di chuyển dữ liệu:', e.message);
+        }
       }
-      if (state.userName) {
+      if (state.userName && state.userPhone) {
         showScreen('overview');
         return;
       }
-    } catch(e) {}
+    } catch(e) {
+      console.warn('Lỗi đọc dữ liệu cũ:', e.message);
+    }
   }
   showScreen('welcome');
 }
@@ -1481,7 +1486,26 @@ function init() {
 function saveState() {
   state.lastUpdated = new Date().toISOString();
   const key = state.userPhone ? 'phuctea_dna_' + state.userPhone : 'phuctea_dna_state';
-  localStorage.setItem(key, JSON.stringify(state));
+  try {
+    localStorage.setItem(key, JSON.stringify(state));
+  } catch(e) {
+    console.warn('Không thể lưu dữ liệu vào localStorage:', e.message);
+    // If quota exceeded, try to clean up old data
+    if (e.name === 'QuotaExceededError' || e.code === 22) {
+      try {
+        // Remove checklist data first (less critical)
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('phuctea_checklist_')) {
+            localStorage.removeItem(k);
+          }
+        }
+        localStorage.setItem(key, JSON.stringify(state));
+      } catch(e2) {
+        alert('Bộ nhớ thiết bị đầy. Vui lòng xóa bớt dữ liệu trình duyệt.');
+      }
+    }
+  }
 }
 
 function loadStateByPhone(phone) {
@@ -1489,11 +1513,28 @@ function loadStateByPhone(phone) {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      state = { ...state, ...parsed };
+      // Ensure all required fields exist with defaults, then overlay saved data
+      const defaults = {
+        userName: '', userPhone: '', currentScreen: 'overview',
+        currentDNA: 0, currentQuestion: 0, answers: {},
+        completedDNAs: [], profileCompleted: false,
+        assessmentHistory: [], continuousMode: false,
+        syncedToSheet: false, shuffledOrders: {}
+      };
+      state = { ...defaults, ...parsed };
       return true;
-    } catch(e) {}
+    } catch(e) {
+      console.warn('Lỗi đọc dữ liệu người dùng:', e.message);
+    }
   }
   return false;
+}
+
+// ==================== UTILITY ====================
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // ==================== NAVIGATION ====================
@@ -1557,7 +1598,11 @@ function navigateTo(screen) {
 }
 
 function goHome() {
-  showScreen('welcome');
+  if (state.userName && state.userPhone) {
+    showScreen('overview');
+  } else {
+    showScreen('welcome');
+  }
 }
 
 function updateHeaderProgress() {
@@ -1577,7 +1622,7 @@ function startJourney() {
     setTimeout(() => document.getElementById('userName').style.borderColor = '', 1500);
     return;
   }
-  if (!phone || phone.length < 9) {
+  if (!phone || phone.length < 9 || phone.length > 11 || /^0+$/.test(phone)) {
     document.getElementById('userPhone').focus();
     document.getElementById('userPhone').style.borderColor = '#ef4444';
     setTimeout(() => document.getElementById('userPhone').style.borderColor = '', 1500);
@@ -1699,6 +1744,14 @@ function boldFirstKeyword(text) {
   return '<strong>' + boldPart + '</strong> ' + rest;
 }
 
+function toggleScenario() {
+  const box = document.getElementById('scenarioBox');
+  const text = document.getElementById('scenarioToggleText');
+  if (!box || !text) return;
+  box.classList.toggle('collapsed');
+  text.textContent = box.classList.contains('collapsed') ? 'Xem tình huống ▼' : 'Thu gọn ▲';
+}
+
 function renderAssessment() {
   const dna = DNA_DATA[state.currentDNA];
   const qIndex = state.currentQuestion;
@@ -1728,8 +1781,8 @@ function renderAssessment() {
     <div class="scenario-box ${scenarioCollapsed}" id="scenarioBox">
       <div class="scenario-label">Hãy tưởng tượng...</div>
       <p>${dna.scenario}</p>
-      <button class="scenario-toggle" onclick="document.getElementById('scenarioBox').classList.toggle('collapsed')">
-        <span>${scenarioCollapsed ? 'Xem tình huống ▼' : 'Thu gọn ▲'}</span>
+      <button class="scenario-toggle" onclick="toggleScenario()">
+        <span id="scenarioToggleText">${scenarioCollapsed ? 'Xem tình huống ▼' : 'Thu gọn ▲'}</span>
       </button>
     </div>
     <div class="assessment-question-progress">${qDots}</div>
@@ -1805,12 +1858,14 @@ function completeDNA() {
       return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
     });
     const archetype = calculateArchetype(scores);
+    state.archetype = archetype.name; // Save archetype to state for admin dashboard
+    const validScores = scores.filter(s => s > 0);
     state.assessmentHistory.push({
       date: new Date().toISOString(),
       scores: scores,
       answers: JSON.parse(JSON.stringify(state.answers)),
       archetype: archetype.name,
-      avgScore: scores.reduce((s, v) => s + v, 0) / scores.filter(s => s > 0).length
+      avgScore: validScores.length > 0 ? validScores.reduce((s, v) => s + v, 0) / validScores.length : 0
     });
   }
   saveState();
@@ -1949,7 +2004,7 @@ function renderResult() {
 
   el.innerHTML = `
     <div class="result-header">
-      <h2>${state.userName}, đây là Hồ Sơ DNA của bạn</h2>
+      <h2>${escapeHtml(state.userName)}, đây là Hồ Sơ DNA của bạn</h2>
       <p>Kết quả được tổng hợp từ ${state.completedDNAs.length}/8 DNA đã khám phá</p>
     </div>
     ${archetype ? `
@@ -2046,7 +2101,7 @@ function renderResult() {
     <div class="reflection-section">
       <h3>Suy ngẫm cá nhân</h3>
       <p>Nhìn vào hồ sơ DNA, bạn bất ngờ ở điểm nào?<br>Điều gì khiến bạn muốn tìm hiểu thêm?</p>
-      <textarea class="reflection-textarea" placeholder="Ghi lại suy nghĩ của bạn... (chỉ lưu trên thiết bị này)"></textarea>
+      <textarea class="reflection-textarea" id="reflectionText" placeholder="Ghi lại suy nghĩ của bạn... (chỉ lưu trên thiết bị này)" oninput="saveReflection(this.value)">${state.reflection || ''}</textarea>
     </div>
     <div class="insight-box" style="margin-top:24px;">
       <div class="insight-label">💡 Lưu ý</div>
@@ -2339,8 +2394,12 @@ function loadChecklist(dnaIndex) {
       checklistCache[dnaIndex] = content;
       renderChecklist(container, content, dnaIndex);
     })
-    .catch(() => {
-      container.innerHTML = '<div style="color:var(--gray-400);font-size:13px;">Không thể tải checklist. Vui lòng thử lại.</div>';
+    .catch((err) => {
+      console.warn('Checklist load error:', err);
+      container.innerHTML = `<div style="color:var(--gray-400);font-size:13px;">
+        Không thể tải checklist.
+        <button class="btn btn-outline" style="font-size:12px;padding:6px 12px;margin-top:8px;" onclick="loadChecklist(${dnaIndex})">Thử lại</button>
+      </div>`;
     });
 }
 
@@ -2414,7 +2473,7 @@ function reviewDNA(index) {
 
   const dna = DNA_DATA[index];
   const answers = state.answers[index] || [];
-  const score = answers.reduce((s, v) => s + (v || 0), 0) / answers.length;
+  const score = answers.length > 0 ? answers.reduce((s, v) => s + (v || 0), 0) / answers.length : 0;
   const level = score >= 4.1 ? 'Xuất sắc' : score >= 3.1 ? 'Tốt' : score >= 2.1 ? 'Tiềm năng' : 'Đang phát triển';
   const el = document.getElementById('assessmentContent');
 
@@ -2461,7 +2520,7 @@ function reviewDNA(index) {
 function showCelebration(dnaIndex) {
   const dna = DNA_DATA[dnaIndex];
   const answers = state.answers[dnaIndex] || [];
-  const score = answers.reduce((s, v) => s + (v || 0), 0) / answers.length;
+  const score = answers.length > 0 ? answers.reduce((s, v) => s + (v || 0), 0) / answers.length : 0;
   const level = score >= 4.1 ? 'Xuất sắc' : score >= 3.1 ? 'Tốt' : score >= 2.1 ? 'Tiềm năng' : 'Đang phát triển';
   const completed = state.completedDNAs.length;
   const nextIdx = findNextDNA();
@@ -2474,12 +2533,12 @@ function showCelebration(dnaIndex) {
     // FULL celebration for 8/8
     const allScores = DNA_DATA.map((_, i) => {
       const ans = state.answers[i] || [];
-      return ans.reduce((s, v) => s + (v || 0), 0) / ans.length;
+      return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
     });
     const archetype = calculateArchetype(allScores);
     card.innerHTML = `
       <div style="font-size:48px; margin-bottom:8px;">&#x1F3C6;</div>
-      <h2 style="font-size:22px; font-weight:800; color:var(--green); margin-bottom:6px;">Xuất sắc, ${state.userName}!</h2>
+      <h2 style="font-size:22px; font-weight:800; color:var(--green); margin-bottom:6px;">Xuất sắc, ${escapeHtml(state.userName)}!</h2>
       <p style="font-size:14px; color:var(--gray-600); margin-bottom:16px;">
         Bạn đã hoàn thành tất cả <strong>8 DNA</strong>!
       </p>
@@ -2588,6 +2647,12 @@ function goToLearningDNA(index) {
   }, 150);
 }
 
+// ==================== REFLECTION SAVE ====================
+function saveReflection(value) {
+  state.reflection = value;
+  saveState();
+}
+
 // ==================== SHARE DNA PROFILE (#7) ====================
 function shareDNAProfile() {
   const scores = DNA_DATA.map((_, i) => {
@@ -2647,19 +2712,20 @@ function exportRadarImage() {
 // ==================== RESET (#10) ====================
 function resetApp() {
   if (confirm('Bạn có chắc muốn đánh giá lại từ đầu? Kết quả cũ sẽ được lưu vào lịch sử.')) {
-    // Archive current results before resetting
+    // Archive current results before resetting (only if not already saved by completeDNA)
     const scores = DNA_DATA.map((_, i) => {
       const ans = state.answers[i] || [];
       return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
     });
-    if (scores.some(s => s > 0) && state.completedDNAs.length > 0) {
-      const archetype = state.completedDNAs.length === 8 ? calculateArchetype(scores) : null;
+    // Only push to history if incomplete (completed 8/8 already saved by completeDNA)
+    if (scores.some(s => s > 0) && state.completedDNAs.length > 0 && state.completedDNAs.length < 8) {
+      const validScores = scores.filter(s => s > 0);
       state.assessmentHistory.push({
         date: new Date().toISOString(),
         scores: scores,
         answers: JSON.parse(JSON.stringify(state.answers)),
-        archetype: archetype ? archetype.name : 'Chưa hoàn thành',
-        avgScore: scores.filter(s => s > 0).reduce((s, v) => s + v, 0) / scores.filter(s => s > 0).length
+        archetype: 'Chưa hoàn thành',
+        avgScore: validScores.length > 0 ? validScores.reduce((s, v) => s + v, 0) / validScores.length : 0
       });
     }
     // Reset assessment data but keep user info and history
@@ -2677,6 +2743,16 @@ function resetApp() {
     showScreen('overview');
   }
 }
+
+// ==================== KEYBOARD HANDLERS ====================
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('celebrationOverlay');
+    if (overlay && overlay.classList.contains('active')) {
+      hideCelebration();
+    }
+  }
+});
 
 // ==================== START ====================
 document.addEventListener('DOMContentLoaded', init);
