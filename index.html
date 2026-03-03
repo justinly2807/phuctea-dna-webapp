@@ -1637,6 +1637,7 @@ function startJourney() {
     state.userPhone = phone;
   }
   saveState();
+  syncToGoogleSheets(); // Sync ngay khi đăng nhập
   showScreen('overview');
 }
 
@@ -1898,15 +1899,18 @@ function calculateArchetype(scores) {
 }
 
 // ==================== GOOGLE SHEETS SYNC ====================
-function syncToGoogleSheets() {
+function syncToGoogleSheets(retryCount) {
   if (!SHEETS_API_URL) return; // Skip if not configured
+  if (!state.userPhone) return; // Need phone to sync
+
   const scores = DNA_DATA.map((_, i) => {
     const ans = state.answers[i] || [];
     return ans.length > 0 ? ans.reduce((s, v) => s + (v || 0), 0) / ans.length : 0;
   });
-  const completedCount = state.completedDNAs.length;
-  const avgScore = scores.filter(s => s > 0).length > 0
-    ? scores.filter(s => s > 0).reduce((s, v) => s + v, 0) / scores.filter(s => s > 0).length : 0;
+  const completedCount = (Array.isArray(state.completedDNAs) ? state.completedDNAs : []).length;
+  const validScores = scores.filter(s => s > 0);
+  const avgScore = validScores.length > 0
+    ? validScores.reduce((s, v) => s + v, 0) / validScores.length : 0;
   const archetype = completedCount === 8 ? calculateArchetype(scores) : null;
 
   const payload = {
@@ -1915,7 +1919,7 @@ function syncToGoogleSheets() {
     phone: state.userPhone,
     scores: scores,
     avgScore: avgScore.toFixed(2),
-    archetype: archetype ? archetype.name : '',
+    archetype: archetype ? archetype.name : (state.archetype || ''),
     status: completedCount + '/8',
     completedDNAs: state.completedDNAs,
     answers: JSON.stringify(state.answers)
@@ -1929,7 +1933,13 @@ function syncToGoogleSheets() {
   }).then(() => {
     state.syncedToSheet = true;
     saveState();
-  }).catch(() => {});
+  }).catch(() => {
+    // Retry once after 3 seconds if first attempt fails
+    const attempt = retryCount || 0;
+    if (attempt < 2) {
+      setTimeout(() => syncToGoogleSheets(attempt + 1), 3000);
+    }
+  });
 }
 
 // ==================== RESULT ====================

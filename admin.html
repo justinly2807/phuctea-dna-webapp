@@ -584,13 +584,16 @@ async function fetchData() {
   refreshBtn.disabled = true;
   refreshBtn.textContent = '⏳ Đang tải...';
 
+  let source = 'localStorage';
   try {
     if (SHEETS_API_URL) {
       const resp = await fetch(SHEETS_API_URL + '?action=getAll');
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const json = await resp.json();
+      if (json.error) throw new Error(json.error);
       allData = json.data || json || [];
+      source = 'Google Sheets';
     } else {
-      // Demo mode: load from localStorage entries
       allData = loadFromLocalStorage();
     }
     processData();
@@ -599,10 +602,16 @@ async function fetchData() {
     // Fallback to localStorage
     allData = loadFromLocalStorage();
     processData();
+    source = 'localStorage (fallback)';
   }
 
   refreshBtn.disabled = false;
   refreshBtn.textContent = '🔄 Tải lại';
+  // Show data source indicator
+  const countEl = document.getElementById('filterCount');
+  if (countEl) {
+    countEl.textContent = filteredData.length + '/' + allData.length + ' đối tác • ' + source;
+  }
 }
 
 function loadFromLocalStorage() {
