@@ -19,12 +19,15 @@
 // 10. Gửi URL đó cho em để cập nhật vào web app
 // ============================================================
 
-const SHEET_NAME = 'Sheet1'; // Tên sheet (mặc định)
+// Tự động lấy sheet đầu tiên (không phụ thuộc tên)
+function getSheet() {
+  return SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+}
 
 // ==================== POST: Nhận data từ web app ====================
 function doPost(e) {
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const sheet = getSheet();
     if (!sheet) {
       return ContentService.createTextOutput(JSON.stringify({ error: 'Sheet not found' }))
         .setMimeType(ContentService.MimeType.JSON);
@@ -81,10 +84,18 @@ function doPost(e) {
 
     if (existingRow > 0) {
       // Update dòng cũ (cùng SĐT)
-      sheet.getRange(existingRow, 1, 1, rowData.length).setValues([rowData]);
+      const range = sheet.getRange(existingRow, 1, 1, rowData.length);
+      range.setValues([rowData]);
+      // Force SĐT (cột C) và Trạng thái (cột N) là text
+      sheet.getRange(existingRow, 3).setNumberFormat('@');
+      sheet.getRange(existingRow, 14).setNumberFormat('@');
     } else {
       // Thêm dòng mới
       sheet.appendRow(rowData);
+      const lastRow = sheet.getLastRow();
+      // Force SĐT (cột C) và Trạng thái (cột N) là text
+      sheet.getRange(lastRow, 3).setNumberFormat('@');
+      sheet.getRange(lastRow, 14).setNumberFormat('@');
     }
 
     return ContentService.createTextOutput(JSON.stringify({ success: true, updated: existingRow > 0 }))
@@ -100,7 +111,7 @@ function doPost(e) {
 function doGet(e) {
   try {
     const action = (e.parameter && e.parameter.action) || 'getAll';
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const sheet = getSheet();
 
     if (!sheet) {
       return sendJson({ error: 'Sheet not found' });
@@ -117,8 +128,11 @@ function doGet(e) {
 
       for (let i = 1; i < data.length; i++) {
         const row = data[i];
-        const phone = String(row[2]).trim();
-        if (!phone) continue; // Skip dòng trống
+        // Đảm bảo SĐT luôn là string và giữ số 0 đầu
+        let phone = String(row[2]).trim();
+        if (!phone || phone === '0') continue; // Skip dòng trống
+        // Nếu Sheets đã cắt số 0 đầu (VD: 912345678 → thêm lại 0)
+        if (/^\d{9}$/.test(phone) && !phone.startsWith('0')) phone = '0' + phone;
 
         // Parse answers JSON
         let answers = {};
@@ -142,19 +156,26 @@ function doGet(e) {
           ],
           avgScore: parseFloat(row[11]) || 0,
           archetype: row[12] || '',
-          status: row[13] || '0/8',
+          // Nếu Sheets parse "2/8" thành ngày, chuyển lại thành chuỗi x/8
+          status: (function(val) {
+            const s = String(val || '');
+            if (s.match(/^\d\/8$/)) return s; // Đã đúng format "x/8"
+            // Nếu bị parse thành date hoặc số, tính lại từ scores
+            return '0/8';
+          })(row[13]),
           completedDNAs: [], // Tính từ scores
           answers: answers,
           assessmentHistory: []
         });
       }
 
-      // Tính completedDNAs từ scores
+      // Tính completedDNAs và status từ scores (đáng tin hơn cell value)
       rows.forEach(r => {
         r.completedDNAs = r.scores.reduce((acc, s, idx) => {
           if (s > 0) acc.push(idx);
           return acc;
         }, []);
+        r.status = r.completedDNAs.length + '/8';
       });
 
       return sendJson({ data: rows });

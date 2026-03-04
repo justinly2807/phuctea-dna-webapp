@@ -1437,7 +1437,7 @@ const DNA_DATA = [
 const BENCHMARK_SCORES = [4.5, 4.2, 4.3, 4.4, 4.5, 4.1, 4.6, 4.3];
 
 // ==================== GOOGLE SHEETS CONFIG ====================
-const SHEETS_API_URL = ''; // Anh sẽ paste URL Apps Script vào đây sau khi tạo
+const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbzqs9qaENqdyliM7lkPCamZJfK9x-gdUk2IcXwe_xzrygJV0DhAVqBGTeStLalmINCcjw/exec';
 
 // ==================== APP STATE ====================
 let state = {
@@ -1925,16 +1925,17 @@ function syncToGoogleSheets(retryCount) {
     answers: JSON.stringify(state.answers)
   };
 
+  // Google Apps Script cần gửi qua form data để tránh CORS preflight
   fetch(SHEETS_API_URL, {
     method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-  }).then(() => {
-    state.syncedToSheet = true;
-    saveState();
+  }).then(resp => {
+    if (resp.ok || resp.type === 'opaque') {
+      state.syncedToSheet = true;
+      saveState();
+    }
   }).catch(() => {
-    // Retry once after 3 seconds if first attempt fails
+    // Retry after 3 seconds if first attempt fails
     const attempt = retryCount || 0;
     if (attempt < 2) {
       setTimeout(() => syncToGoogleSheets(attempt + 1), 3000);
